@@ -1,0 +1,114 @@
+
+
+.container{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: space-around;
+}
+
+.div-left{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFF;
+    height: 100%;
+    flex: 1;
+
+}
+
+.div-left img{
+    width: 600px;
+    max-width: 70%;
+    
+}
+
+.div-right{
+    background-color: #FF8820;
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.login{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+}
+
+form {
+    margin-top: 1.5rem;
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+}
+
+.login input {
+    margin-bottom: 1rem;
+    height: 35px;
+    border-radius: 4px;
+    border: 0;
+    padding: 10px;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+form button {
+    margin-top: 10px;
+    height: 35px;
+    border: 0;
+    border-radius: 4px;
+    background-color: #FFF;
+    color: #000;
+    font-weight: 900;
+    transition: all 0.5s;
+}
+
+form button:hover {
+    background-color: #d8d8d8;
+}
+
+form h1 {
+    text-align: center;
+    font-size: 55px;
+    margin-bottom: 30px;
+    color: #FFF;
+}
+
+form label {
+    text-align: left;
+    color: #FFF;
+    font-weight: bold;
+    margin-bottom: 5px;    
+}
+
+.newAccount{
+    margin-top: 15px;
+    text-decoration: none;
+    color: #FFF;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.5s;
+}
+
+.newAccount:hover{
+    color: #d8d8d8;
+}
+
+
+/*MOBILE*/
+
+@media screen and (max-width: 800px){
+    .container{
+        flex-direction: column;
+    }
+
+    .div-left{
+        display: none;
+    }
+}
