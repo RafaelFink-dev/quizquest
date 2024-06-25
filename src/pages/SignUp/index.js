@@ -13,6 +13,8 @@ export default function SignUp() {
     const [email, setEmail] = useState('');
     const [cnpj, setCNPJ] = useState('');
     const [password, setPassword] = useState('');
+    const [endereco, setEndereco] = useState('');
+    const [nivelDeEnsino, setNivelDeEnsino] = useState('Ensino Médio');
     const [instituicao, setInstituicao] = useState(false);
 
     const { signUp, loadingAuth } = useContext(AuthContext);
@@ -21,11 +23,25 @@ export default function SignUp() {
         setInstituicao(!instituicao)
     }
 
+    function handleChangeSelect(e) {
+        setNivelDeEnsino(e.target.value);
+    }
+
     async function handleRegister(e) {
         e.preventDefault(); //Previni att pagina ou enviar dados para outra
+        
+        if (instituicao) {
+            if (usuario !== '' && email !== '' && password !== '' && endereco !== '' && nivelDeEnsino !== '') {
+                await signUp(email, password, usuario, instituicao, endereco, nivelDeEnsino)
+            } else {
+                toast.warn('Preencha todos os campos!')
+            }
 
-        if (usuario !== '' && email !== '' && password !== '') {
-            await signUp(email, password, usuario, instituicao)
+            return;
+        }
+
+        if (usuario !== '' && email !== '' && password !== '' ) {
+            await signUp(email, password, usuario)
         } else {
             toast.warn('Preencha todos os campos!')
         }
@@ -43,7 +59,7 @@ export default function SignUp() {
                     <form onSubmit={handleRegister}>
                         <h1>CADASTRE-SE</h1>
 
-                        <label>USUÁRIO:</label>
+                        <label>NOME:</label>
                         <input
                             type='usuario'
                             placeholder='João da Silva'
@@ -80,6 +96,29 @@ export default function SignUp() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
+
+                        {instituicao ? (
+                            <div className='div-cnpj'>
+                                <label>ENDEREÇO:</label>
+                                <input
+                                    type='text'
+                                    placeholder='Rua São João'
+                                    value={endereco}
+                                    onChange={(e) => setEndereco(e.target.value)}
+                                />
+
+                                <label>NÍVEL DE ENSINO:</label>
+                                <select value={nivelDeEnsino} onChange={handleChangeSelect} className='combo-nivel-ensino'>
+                                    <option value='Ensino Fundamentel'>Ensino Fundamental</option>
+                                    <option value='Ensino Médio'>Ensino Médio</option>
+                                    <option value='Ensino Superior/Graduação'>Ensino Superior/Graduação</option>
+                                </select>
+                            </div>
+
+                        ) : (
+                            <></>
+                        )}
+
                         <div className='checkBox'>
                             <input
                                 type="checkbox"

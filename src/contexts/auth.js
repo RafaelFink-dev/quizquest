@@ -1,6 +1,6 @@
 import { useState, createContext, useEffect } from 'react';
 import { auth, db } from '../services/firebaseConnection';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,28 @@ function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loadingAuth, setLoadingAuth] = useState(false);
     const [loading, setLoading] = useState(true);
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+
+        //Ciclo de vida para ao carregar ele verifica se tem usuario e faz as ações necessárias
+
+        async function loadUser(){
+            const storageUser = localStorage.getItem('@userDetail')
+
+            if(storageUser){
+                setUser(JSON.parse(storageUser))
+                setLoading(false);
+            }
+
+            setLoading(false);
+        };
+
+        loadUser();
+
+    }, [])
+
 
     //Gravar no LocalStorage
     function storageUser(data) {
@@ -20,9 +41,65 @@ function AuthProvider({ children }) {
     }
 
     //Cadastrar usuário
-    async function signUp(email, password, name, instituicao) {
+    async function signUp(email, password, name, instituicao, endereco, nivelDeEnsino) {
         setLoadingAuth(true);
 
+        if (instituicao) {
+
+            await createUserWithEmailAndPassword(auth, email, password)
+                //Caso de sucesso
+                .then(async (value) => {
+
+                    let uid = value.user.uid;
+
+                    await setDoc(doc(db, 'users', uid), {
+                        nome: name,
+                        instituicao: instituicao,
+                        endereco: endereco,
+                        nivelDeEnsino: nivelDeEnsino,
+                        avatarUrl: null
+                    })
+                        .then(() => {
+
+                            let data = {
+                                uid: uid,
+                                nome: name,
+                                email: value.user.email,
+                                instituicao: instituicao,
+                                endereco: endereco,
+                                nivelDeEnsino: nivelDeEnsino,
+                                avatarUrl: null
+                            };
+
+                            storageUser(data);
+                            //setUser(data); talvez nao seja necessario passar isso quando cadastrar só depois de logar
+                            setLoadingAuth(false);
+                            toast.success('Cadastro efetuado, faça login!')
+                            navigate('/')
+
+                        })
+                })
+                .catch((error) => {
+
+                    if (error.code === 'auth/weak-password') {
+                        toast.warn('A senha deve ter no mínimo 6 digitos!')
+                        console.log(error.code)
+                        setLoadingAuth(false);
+                    }
+
+                    if (error.code === 'auth/email-already-in-use') {
+                        toast.warn('E-mail já esta em uso!')
+                        console.log(error.code)
+                        setLoadingAuth(false);
+                    }
+
+                    setLoadingAuth(false);
+                })
+
+            return;
+        }
+
+        //CASO NAO FOR INSTITUIÇÃO É ALUNO--MODELO ORIGINAL
         await createUserWithEmailAndPassword(auth, email, password)
             //Caso de sucesso
             .then(async (value) => {
@@ -31,21 +108,21 @@ function AuthProvider({ children }) {
 
                 await setDoc(doc(db, 'users', uid), {
                     nome: name,
-                    instituicao: instituicao,
+                    aluno: true,
                     avatarUrl: null
                 })
                     .then(() => {
 
-                        let data = {
+                        /*let data = {
                             uid: uid,
                             nome: name,
                             email: value.user.email,
-                            instituicao: instituicao,
+                            aluno: true,
                             avatarUrl: null
                         };
 
                         storageUser(data);
-                        setUser(data);
+                        setUser(data); talvez nao seja necessario passar isso quando cadastrar só depois de logar*/
                         setLoadingAuth(false);
                         toast.success('Cadastro efetuado, faça login!')
                         navigate('/')
@@ -85,8 +162,7 @@ function AuthProvider({ children }) {
                 let data = {
                     uid: uid,
                     nome: docSnap.data().nome,
-                    email: value.user.email,
-                    instituicao: value.user.instituicao,
+                    instituicao: docSnap.data().instituicao,
                     avatarUrl: docSnap.data().avatarUrl
                 };
 
@@ -106,15 +182,47 @@ function AuthProvider({ children }) {
             })
     }
 
+
+    //REDEFINIR SENHA DO USUARIO
+
+    async function ResetPassword(email) {
+        setLoadingAuth(true);
+
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                toast.success('E-mail de redefinição enviado com sucesso!')
+                navigate('/')
+                setLoadingAuth(false);
+            })
+            .catch((error) => {
+                toast.error("Erro ao enviar e-mail de redefinição");
+                setLoadingAuth(false);
+            })
+
+
+    }
+
+    //DESLOGAR USUARIO
+
+    async function logout(){
+        //Desloga o contexto, remove local storage e nulla user
+        await signOut(auth);
+        localStorage.removeItem('@userDetail');
+        setUser(null);
+    }
+
     return (
         <AuthContext.Provider
-        //Exportando quais informações podem acessar
+            //Exportando quais informações podem acessar
             value={{
                 signed: !!user,
                 user,
                 signUp,
                 signIn,
+                ResetPassword,
                 loadingAuth,
+                loading,
+                logout
             }}
 
         >

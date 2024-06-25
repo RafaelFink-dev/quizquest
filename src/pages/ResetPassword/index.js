@@ -1,4 +1,4 @@
-import './signin.css';
+//import './signin.css';
 import logo from '../../assets/logo.png';
 
 import { useState, useContext } from 'react';
@@ -7,18 +7,17 @@ import { toast } from 'react-toastify';
 
 import { AuthContext } from '../../contexts/auth';
 
-export default function SignIn() {
+export default function ResetPassword() {
 
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
-    const { signIn, loadingAuth } = useContext(AuthContext);
+    const { ResetPassword, loadingAuth } = useContext(AuthContext);
 
-    async function handleSignIn(e) {
+    async function handleReset(e) {
         e.preventDefault(); 
 
-        if (email !== '' && password !== '') {
-            await signIn(email, password )
+        if (email !== '') {
+            await ResetPassword(email)
         } else {
             toast.warn('Preencha todos os campos!')
         }
@@ -33,8 +32,8 @@ export default function SignIn() {
             <div className="div-right">
                 <div className='login'>
 
-                    <form onSubmit={handleSignIn}>
-                        <h1>LOGIN</h1>
+                    <form onSubmit={handleReset}>
+                        <h1>REDEFINIR SENHA</h1>
 
                         <label>EMAIL:</label>
                         <input
@@ -44,20 +43,11 @@ export default function SignIn() {
                             onChange={(e) => setEmail(e.target.value)}
                         />
 
-                        <label>SENHA:</label>
-                        <input
-                            type='password'
-                            placeholder='*******'
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-
                         <button type='submit'>
-                            {loadingAuth ? 'CARREGANDO...' : 'ACESSAR'}
+                            {loadingAuth ? 'ENVIANDO...' : 'ENVIAR EMAIL DE REDEFINIÇÃO'}
                         </button>
 
-                        <Link to='/register' className='newAccount'>Não tem uma conta ? Crie já!</Link>
-                        <Link to='/resetPassword' className='newAccount'>Esqueci minha senha</Link>
+                        <Link to='/' className='newAccount'>Voltar a tela de login</Link>
 
                     </form>
 
