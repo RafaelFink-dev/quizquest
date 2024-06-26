@@ -2,22 +2,22 @@ import Header from '../../components/Header';
 import { AuthContext } from '../../contexts/auth';
 import { useContext } from 'react';
 
+import { FiBarChart } from 'react-icons/fi';
+import Title from '../../components/Title';
+
 
 export default function Dashboard() {
 
     const { logout } = useContext(AuthContext);
 
-    async function handleLogout() {
-        await logout();
-    }
-
     return (
-        <div className=''>
+        <div>
 
             <Header />
             <div className='content'>
-                <h1>PAGINA Dashboard</h1>
-                <button onClick={handleLogout}>SAIR DA CONTA</button>
+                <Title name='HOME'>
+                    <FiBarChart size={24} />
+                </Title>
             </div>
         </div>
     )

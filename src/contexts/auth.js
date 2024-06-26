@@ -54,6 +54,7 @@ function AuthProvider({ children }) {
 
                     await setDoc(doc(db, 'users', uid), {
                         nome: name,
+                        email: email,
                         instituicao: instituicao,
                         endereco: endereco,
                         nivelDeEnsino: nivelDeEnsino,
@@ -61,7 +62,7 @@ function AuthProvider({ children }) {
                     })
                         .then(() => {
 
-                            let data = {
+                            /*let data = {
                                 uid: uid,
                                 nome: name,
                                 email: value.user.email,
@@ -72,7 +73,7 @@ function AuthProvider({ children }) {
                             };
 
                             storageUser(data);
-                            //setUser(data); talvez nao seja necessario passar isso quando cadastrar só depois de logar
+                            //setUser(data); talvez nao seja necessario passar isso quando cadastrar só depois de logar*/
                             setLoadingAuth(false);
                             toast.success('Cadastro efetuado, faça login!')
                             navigate('/')
@@ -108,6 +109,7 @@ function AuthProvider({ children }) {
 
                 await setDoc(doc(db, 'users', uid), {
                     nome: name,
+                    email: email,
                     aluno: true,
                     avatarUrl: null
                 })
@@ -162,6 +164,7 @@ function AuthProvider({ children }) {
                 let data = {
                     uid: uid,
                     nome: docSnap.data().nome,
+                    email: docSnap.data().email,
                     instituicao: docSnap.data().instituicao,
                     avatarUrl: docSnap.data().avatarUrl
                 };
@@ -222,7 +225,9 @@ function AuthProvider({ children }) {
                 ResetPassword,
                 loadingAuth,
                 loading,
-                logout
+                logout,
+                storageUser,
+                setUser
             }}
 
         >

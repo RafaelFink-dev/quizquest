@@ -1,0 +1,84 @@
+.container-profile{
+    display: flex;
+    background-color: #F8F8F8;
+    border-radius: 6px;
+    padding: 0.8em;
+    align-items: center;
+    margin-bottom: 1em;
+}
+
+.label-avatar{
+    width: 280px;
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.label-avatar input {
+    display: none;
+}
+
+.label-avatar span{
+    z-index: 99;
+    position: absolute;
+    opacity: 0.7;
+    transition: all 0.5s;
+    color: #FFF;
+}
+
+
+.label-avatar span:hover{
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.form-profile{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.form-profile img{
+    margin-bottom: 1em;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.form-profile label{
+    margin-bottom: 0.5em;
+    font-size: 0.9em;
+    color: #121212;
+}
+
+.form-profile input, textarea, select{
+    margin-bottom: 1em;
+    padding: 0.7em;
+    border: 0;
+    border-radius: 6px;
+    max-width: 600px;
+    background-color: #e9e9e9;
+}
+
+.form-profile-boolean{
+    display: flex;
+    flex-direction: column;
+}
+
+.form-profile input:disabled{
+    cursor: not-allowed;
+}
+
+.form-profile .btn-save{
+    max-width: 600px;
+    background-color: #FF8820;
+    color: #FFF;
+}
+
+.form-profile .btn-save:hover{
+    background-color: rgb(245, 114, 0);
+
+}
+

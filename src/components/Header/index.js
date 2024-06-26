@@ -16,41 +16,53 @@ export default function Header() {
 
     return (
         <div className="sidebar">
-            <div className='header'>
+            <div className='sidebar-header'>
                 <img src={user.avatarUrl === null ? avatarImg : user.avatarUrl} alt="Foto do usuário" />
-                <h2>Seja bem-vindo(a): {user.nome}</h2>
+                <h2>Seja bem-vindo(a):</h2>
+                <h2>{user.nome}</h2>
                 <h3>Sua pontuação: 426 pontos</h3>
             </div>
 
-            <Link to='/dashboard'>
-                <FiHome color='#121212' size={24} />
-                HOME
-            </Link>
+            <div className="sidebar-middle">
+                <Link to='/dashboard'>
+                    <FiHome color='#121212' size={24} />
+                    HOME
+                </Link>
 
-            <Link to='#'>
-                <FiHelpCircle color='#121212' size={24} />
-                QUIZ
-            </Link>
+                <Link to='#'>
+                    <FiHelpCircle color='#121212' size={24} />
+                    QUIZ
+                </Link>
 
-            <Link to='#'>
-                <FiBarChart color='#121212' size={24} />
-                RANKING
-            </Link>
+                <Link to='#'>
+                    <FiBarChart color='#121212' size={24} />
+                    RANKING
+                </Link>
 
-            <Link to='/profile'>
-                <FiUser color='#121212' size={24} />
-                PERFIL
-            </Link>
+                <Link to='/profile'>
+                    <FiUser color='#121212' size={24} />
+                    PERFIL
+                </Link>
+            </div>
 
-            <Link to='#'>
-                <FiLock color='#121212' size={24} />
-                ÁREA PRIVADA
-            </Link>
 
-            <Link to='#' onClick={handleLogout}>
-                <FiUser color='#121212' size={24} />
-                SAIR DO SISTEMA
-            </Link>
+            <div className='sidebar-footer'>
+                <>
+                    {user.instituicao === true ?
+                        <>
+                            <Link to='/privateArea'>
+                                <FiLock color='#121212' size={24} />
+                                ÁREA PRIVADA
+                            </Link>
+                        </> : <></>}
+
+                </>
+
+                <Link to='#' onClick={handleLogout}>
+                    <FiUser color='#121212' size={24} />
+                    SAIR DO SISTEMA
+                </Link>
+            </div>
 
         </div>
 

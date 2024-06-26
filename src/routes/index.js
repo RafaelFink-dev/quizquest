@@ -6,6 +6,7 @@ import ResetPassword from '../pages/ResetPassword';
 import Dashboard from "../pages/Dashboard";
 import Private from "./Private";
 import Profile from "../pages/Profile";
+import PrivateArea from '../pages/PrivateArea';
 
 
 
@@ -19,6 +20,7 @@ function RoutesApp() {
 
             <Route path="/dashboard" element={ <Private> <Dashboard /> </Private> } />
             <Route path="/profile" element={ <Private> <Profile /> </Private> } />
+            <Route path="/privateArea" element={ <Private> <PrivateArea /> </Private> } />
 
         </Routes>
     )
