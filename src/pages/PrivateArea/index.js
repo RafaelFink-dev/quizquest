@@ -8,6 +8,7 @@ import { FiLock } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 export default function PrivateArea() {
+
     return (
         <div>
 
@@ -20,16 +21,16 @@ export default function PrivateArea() {
 
                 <div className='container-profile'>
                     <div className='container-options'>
-                        
+
                         <Link to='/registerAccount'>
                             CADASTRAR PROFESSORES
                         </Link>
 
-                        <Link to='#'>
+                        <Link to='#' style={{backgroundColor: '#d3d3d3', pointerEvents: 'none' }}>
                             CADASTRAR PERGUNTAS
                         </Link>
 
-                        <Link to='#'>
+                        <Link to='#' style={{backgroundColor: '#d3d3d3', pointerEvents: 'none' }}>
                             CADASTRAR QUIZ
                         </Link>
 
@@ -37,11 +38,11 @@ export default function PrivateArea() {
                             CADASTRAR TEMÁTICAS
                         </Link>
 
-                        <Link to='#'>
+                        <Link to='#' style={{backgroundColor: '#d3d3d3', pointerEvents: 'none' }}>
                             VISUALIZAR INDICADORES
                         </Link>
 
-                        <Link to='#'>
+                        <Link to='/registerCourse'>
                             CADASTRAR CURSOS
                         </Link>
 

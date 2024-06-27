@@ -10,6 +10,7 @@ import PrivateArea from '../pages/PrivateArea';
 import RegisterAccount from '../pages/RegisterAccount';
 import RegisterThemes from '../pages/RegisterThemes';
 import RegisterClass from '../pages/RegisterClass';
+import RegisterCourse from '../pages/RegisterCourse';
 
 
 
@@ -27,6 +28,7 @@ function RoutesApp() {
             <Route path="/registerAccount" element={ <Private> <RegisterAccount /> </Private> } />
             <Route path="/registerThemes" element={ <Private> <RegisterThemes /> </Private> } />
             <Route path="/registerClass" element={ <Private> <RegisterClass /> </Private> } />
+            <Route path="/registerCourse" element={ <Private> <RegisterCourse /> </Private> } />
             
 
         </Routes>
