@@ -19,34 +19,37 @@ export default function PrivateArea() {
                 </Title>
 
                 <div className='container-profile'>
+                    <div className='container-options'>
+                        
+                        <Link to='/registerAccount'>
+                            CADASTRAR PROFESSORES
+                        </Link>
 
-                    <Link to='#'>
-                        CADASTRAR PROFESSORES
-                    </Link>
+                        <Link to='#'>
+                            CADASTRAR PERGUNTAS
+                        </Link>
 
-                    <Link to='#'>
-                        CADASTRAR PERGUNTAS
-                    </Link>
+                        <Link to='#'>
+                            CADASTRAR QUIZ
+                        </Link>
 
-                    <Link to='#'>
-                        CADASTRAR QUIZ
-                    </Link>
+                        <Link to='/registerThemes'>
+                            CADASTRAR TEMÁTICAS
+                        </Link>
 
-                    <Link to='#'>
-                        CADASTRAR TEMÁTICAS
-                    </Link>
+                        <Link to='#'>
+                            VISUALIZAR INDICADORES
+                        </Link>
 
-                    <Link to='#'>
-                        VISUALIZAR INDICADORES
-                    </Link>
+                        <Link to='#'>
+                            CADASTRAR CURSOS
+                        </Link>
 
-                    <Link to='#'>
-                        CADASTRAR CURSOS
-                    </Link>
+                        <Link to='/registerClass'>
+                            CADASTRAR TURMAS
+                        </Link>
 
-                    <Link to='#'>
-                        CADASTRAR TURMAS
-                    </Link>
+                    </div>
 
                 </div>
 

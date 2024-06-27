@@ -1,0 +1,31 @@
+
+.container-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px; /* Espaço entre os links */
+}
+
+.container-options a {
+  padding: 12px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #FFF;
+  background-color: #FF8820;
+  border-radius: 4px;
+  margin-bottom: 10px; /* Adiciona margem inferior para evitar sobreposição */
+  transition: all 0.5s;
+}
+
+.container-options a:hover {
+    color: #FFF;
+    background-color: rgb(245, 114, 0);
+
+  }

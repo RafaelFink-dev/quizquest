@@ -1,0 +1,23 @@
+.area-btn{
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 10px;
+}
+
+.btn-save{
+    height: 40px;
+    border: 0;
+    border-radius: 4px;
+    font-weight: 900;
+    transition: all 0.5s;
+    width: 280px;
+    background-color: #FF8820;
+    color: #FFF;
+}
+
+.btn-save:hover{
+    background-color: rgb(245, 114, 0);
+
+}

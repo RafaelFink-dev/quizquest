@@ -24,7 +24,7 @@ export default function Header() {
             </div>
 
             <div className="sidebar-middle">
-                <Link to='/dashboard'>
+                <Link to='/home'>
                     <FiHome color='#121212' size={24} />
                     HOME
                 </Link>
@@ -48,7 +48,7 @@ export default function Header() {
 
             <div className='sidebar-footer'>
                 <>
-                    {user.instituicao === true ?
+                    {user.instituicao === true || user.professor === true ?
                         <>
                             <Link to='/privateArea'>
                                 <FiLock color='#121212' size={24} />

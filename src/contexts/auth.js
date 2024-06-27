@@ -19,10 +19,10 @@ function AuthProvider({ children }) {
 
         //Ciclo de vida para ao carregar ele verifica se tem usuario e faz as ações necessárias
 
-        async function loadUser(){
+        async function loadUser() {
             const storageUser = localStorage.getItem('@userDetail')
 
-            if(storageUser){
+            if (storageUser) {
                 setUser(JSON.parse(storageUser))
                 setLoading(false);
             }
@@ -40,7 +40,43 @@ function AuthProvider({ children }) {
         localStorage.setItem('@userDetail', JSON.stringify(data));
     }
 
-    //Cadastrar usuário
+    //Cadastrar professor
+
+    async function handleRegisterTeacher(email, password, name) {
+        setLoadingAuth(true);
+
+        await createUserWithEmailAndPassword(auth, email, password)
+            //Caso de sucesso
+            .then(async (value) => {
+
+                let uid = value.user.uid;
+
+                await setDoc(doc(db, 'users', uid), {
+                    nome: name,
+                    email: email,
+                    professor: true,
+                    avatarUrl: null
+                })
+                    .then(() => {
+
+                        setLoadingAuth(false);
+                        toast.success('Professor cadastrado com sucesso!')
+
+                    })
+            })
+            .catch((error) => {
+
+                if (error.code === 'auth/email-already-in-use') {
+                    toast.warn('E-mail já esta em uso!')
+                    console.log(error.code)
+                    setLoadingAuth(false);
+                }
+
+                setLoadingAuth(false);
+            })
+    }
+
+    //Cadastrar usuário aluno/instituicao
     async function signUp(email, password, name, instituicao, endereco, nivelDeEnsino) {
         setLoadingAuth(true);
 
@@ -166,6 +202,7 @@ function AuthProvider({ children }) {
                     nome: docSnap.data().nome,
                     email: docSnap.data().email,
                     instituicao: docSnap.data().instituicao,
+                    professor: docSnap.data().professor,
                     avatarUrl: docSnap.data().avatarUrl
                 };
 
@@ -173,7 +210,7 @@ function AuthProvider({ children }) {
                 storageUser(data);
                 setLoadingAuth(false);
                 toast.success('Bem-vindo(a)!')
-                navigate('/dashboard')
+                navigate('/home')
             })
             .catch((error) => {
 
@@ -186,7 +223,7 @@ function AuthProvider({ children }) {
     }
 
 
-    //REDEFINIR SENHA DO USUARIO
+    //REDEFINIR SENHA DO USUARIO PADRÃO
 
     async function ResetPassword(email) {
         setLoadingAuth(true);
@@ -205,9 +242,27 @@ function AuthProvider({ children }) {
 
     }
 
+     //ENVIAR EMAIL SENHA PROFESSOR
+
+     async function ResetPasswordTeacher(email) {
+        setLoadingAuth(true);
+
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                toast.success('E-mail para criação de senha enviado!')
+                setLoadingAuth(false);
+            })
+            .catch((error) => {
+                toast.error("Erro ao enviar e-mail de criação de senha");
+                setLoadingAuth(false);
+            })
+
+
+    }
+
     //DESLOGAR USUARIO
 
-    async function logout(){
+    async function logout() {
         //Desloga o contexto, remove local storage e nulla user
         await signOut(auth);
         localStorage.removeItem('@userDetail');
@@ -223,6 +278,8 @@ function AuthProvider({ children }) {
                 signUp,
                 signIn,
                 ResetPassword,
+                handleRegisterTeacher,
+                ResetPasswordTeacher,
                 loadingAuth,
                 loading,
                 logout,

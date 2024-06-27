@@ -1,0 +1,24 @@
+.form-profile .obs1 {
+    font-style: italic;
+    font-weight: bold;
+    width: 400px;
+}
+
+
+.form-profile .obs2 {
+    font-style: italic;
+    font-weight: 400;
+    width: 400px;
+    text-align: center;
+}
+
+.form-profile {
+   display: flex;
+}
+
+.area-button{
+    display: flex;
+    max-width: 600px;
+    justify-content: center;
+    align-items: center;
+}
