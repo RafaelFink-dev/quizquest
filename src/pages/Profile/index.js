@@ -74,7 +74,7 @@ export default function Profile() {
     async function handleSubmit(e) {
         e.preventDefault();
 
-        if (imageAvatar === null && nome !== '') {
+        if (imageAvatar === null && nome !== user.nome) {
             //Atualizar somente o nome
             const docRef = doc(db, 'users', user.uid)
             await updateDoc(docRef, {

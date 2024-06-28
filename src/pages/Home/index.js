@@ -1,3 +1,4 @@
+import './home.css';
 
 import { AuthContext } from '../../contexts/auth';
 import { useContext } from 'react';
@@ -7,7 +8,7 @@ import Header from '../../components/Header';
 import Title from '../../components/Title';
 
 
-export default function Dashboard() {
+export default function Home() {
 
     const { logout } = useContext(AuthContext);
 
@@ -16,9 +17,12 @@ export default function Dashboard() {
 
             <Header />
             <div className='content'>
+
                 <Title name='HOME'>
                     <FiBarChart size={24} />
                 </Title>
+
+
             </div>
         </div>
     )

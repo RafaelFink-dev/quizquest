@@ -6,7 +6,7 @@ import Title from '../../components/Title';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { FiUserPlus } from 'react-icons/fi';
+import { FiEdit } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 
 export default function RegisterThemes() {
@@ -26,17 +26,17 @@ export default function RegisterThemes() {
             <div className='content'>
 
                 <Title name='ÁREA PRIVADA - CADASTRO DE TEMÁTICAS'>
-                    <FiUserPlus size={24} />
+                    <FiEdit size={24} />
                 </Title>
 
                 <div className='container-profile'>
 
                     <form className='form-profile'>
 
-                        <label>DIGITE O NOME DA TEMÁTICA:*</label>
-                        <input type='text' value={tematica} onChange={(e) => setTematica(e.target.value)} />
+                        <label>DIGITE O NOME DA TEMÁTICA:</label>
+                        <input type='text' value={tematica} onChange={(e) => setTematica(e.target.value)} placeholder='Digite o nome da temática'/>
 
-                        <label>CURSO:*</label>
+                        <label>CURSO:</label>
                         <select value={''} onChange={() => { }} className='combo-nivel-ensino'>
                             <option value='opçoes'>opções do banco</option>
                             <option value='opçoes'>opções do banco</option>

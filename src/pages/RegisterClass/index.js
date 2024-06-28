@@ -5,7 +5,7 @@ import Title from '../../components/Title';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { FiUserPlus } from 'react-icons/fi';
+import { FiEdit } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 
 export default function RegisterClass() {
@@ -25,24 +25,24 @@ export default function RegisterClass() {
             <div className='content'>
 
                 <Title name='ÁREA PRIVADA - CADASTRO DE TURMAS'>
-                    <FiUserPlus size={24} />
+                    <FiEdit size={24} />
                 </Title>
 
                 <div className='container-profile'>
 
                     <form className='form-profile'>
 
-                        <label>DIGITE O NOME DA TURMA:*</label>
-                        <input type='text' value={turma} onChange={(e) => setTurma(e.target.value)} />
+                        <label>DIGITE O NOME DA TURMA:</label>
+                        <input type='text' value={turma} onChange={(e) => setTurma(e.target.value)} placeholder='Digite o nome da turma' />
 
-                        <label>CURSO:*</label>
+                        <label>CURSO:</label>
                         <select value={''} onChange={() => { }} className='combo-nivel-ensino'>
                             <option value='opçoes'>opções do banco</option>
                             <option value='opçoes'>opções do banco</option>
                             <option value='opçoes'>opções do banco</option>
                         </select>
 
-                        <label>TURNO:*</label>
+                        <label>TURNO:</label>
                         <select value={''} onChange={() => { }} className='combo-nivel-ensino'>
                             <option value='Manhã'>Manhã</option>
                             <option value='Tarde'>Tarde</option>

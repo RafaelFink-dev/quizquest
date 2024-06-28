@@ -26,11 +26,11 @@ export default function PrivateArea() {
                             CADASTRAR PROFESSORES
                         </Link>
 
-                        <Link to='#' style={{backgroundColor: '#d3d3d3', pointerEvents: 'none' }}>
+                        <Link to='/registerQuestion'>
                             CADASTRAR PERGUNTAS
                         </Link>
 
-                        <Link to='#' style={{backgroundColor: '#d3d3d3', pointerEvents: 'none' }}>
+                        <Link to='/registerQuiz'>
                             CADASTRAR QUIZ
                         </Link>
 
