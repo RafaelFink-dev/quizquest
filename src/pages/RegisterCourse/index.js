@@ -2,7 +2,7 @@
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { FiEdit } from 'react-icons/fi';
@@ -18,7 +18,6 @@ export default function RegisterCourse() {
     const [areaConhecimento, setAreaConhecimento] = useState('Ciências Agrárias');
 
     const navigate = useNavigate();
-
 
 
     function handleCancel() {
