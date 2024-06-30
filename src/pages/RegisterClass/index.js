@@ -69,7 +69,7 @@ export default function RegisterClass() {
         await addDoc(collection(db, 'turmas'), {
             created: new Date(),
             nomeTurma: turma,
-            curso: cursos[courseSelected].nomeCurso,
+            curso: cursos[courseSelected],
             turnoTurna: turnoSelecionado
         })
             .then(() => {

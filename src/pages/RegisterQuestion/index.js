@@ -25,6 +25,12 @@ export default function RegisterQuestion() {
     const [difficultySelected, setDifficultySelected] = useState('Fácil');
     const [questionCorrect, setQuestionCorrect] = useState('');
 
+    //TESTES INCLUSAO PERGUNTA
+    const [question, setQuestion] = useState('');
+    const [answers, setAnswers] = useState(['', '', '', '']);
+    const [correctAnswer, setCorrectAnswer] = useState(null);
+    const [gabarito, setGabarito] = useState('');
+
 
     useEffect(() => {
 
@@ -42,7 +48,6 @@ export default function RegisterQuestion() {
                         })
                     })
 
-                    console.log(snapshot.docs.length)
                     if (snapshot.docs.length === 0) {
                         setTematicas([{ id: 1, nomeTematica: 'Nenhuma temática encontrada' }]);
                         setLoadTematicas(false);
@@ -77,8 +82,42 @@ export default function RegisterQuestion() {
         toast.warn('Operação cancelada!')
     }
 
-    function handleOptionChange(e) {
-        setQuestionCorrect(e.target.value);
+    function handleAnswerChange(index, value) {
+        const newAnswers = [...answers];
+        newAnswers[index] = value;
+        setAnswers(newAnswers);
+    }
+
+    async function handleRegisterQuestion(e) {
+        e.preventDefault();
+        //console.log("resposta correta " + correctAnswer)
+
+        if (!question || answers.some(answer => answer === '') || correctAnswer === null || gabarito === '') {
+            toast.warn('Por favor, preencha todos os campos e selecione a resposta correta.');
+            return;
+        }
+
+        await addDoc(collection(db, 'perguntas'), {
+            pergunta: question,
+            respostas: answers,
+            resposta_correta: correctAnswer,
+            gabarito: gabarito,
+            dificuldade: difficultySelected,
+            tematica: tematicas[tematicaSelected]
+        })
+            .then(() => {
+                toast.success('Questão adicionada com sucesso!');
+                setQuestion('');
+                setAnswers(['', '', '', '']);
+                setCorrectAnswer(null);
+                setGabarito('');
+                setTematicaSelected(0);
+                setDifficultySelected('Fácil');
+            })
+            .catch((error) => {
+                console.error('Erro ao adicionar questão: ', error);
+                toast.error('Erro ao adicionar questão. Por favor, tente novamente.');
+            })
     }
 
     return (
@@ -131,9 +170,51 @@ export default function RegisterQuestion() {
 
                     </div>
 
-                    <form className='form-profile'>
+                    <form className='form-profile' onSubmit={handleRegisterQuestion}>
                         <label>DIGITE A PERGUNTA:</label>
-                        <textarea placeholder='Digite sua pergunta'></textarea>
+                        <textarea placeholder='Digite sua pergunta' value={question} onChange={(e) => setQuestion(e.target.value)}></textarea>
+
+                        <div className='container-alternativas'>
+                            {answers.map((answer, index) => (
+
+
+                                <div key={index} className='container-alternativas'>
+
+                                    <div className='correta'>
+                                        <div>
+                                            <label>RESPOSTA {index + 1}</label>
+                                        </div>
+                                        <div>
+                                            <label>ALTERNATIVA CORRETA:</label>
+                                            <input
+                                                type="radio"
+                                                name="correctAnswer"
+                                                checked={correctAnswer === index}
+                                                onChange={() => setCorrectAnswer(index)}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className='alternativa'>
+                                        <textarea placeholder='Digite sua alternativa' value={answer} onChange={(e) => handleAnswerChange(index, e.target.value)} ></textarea>
+                                    </div>
+
+                                </div>
+
+
+                            ))}
+                        </div>
+
+                        <div className='container-alternativas'>
+                            <label>GABARITO DA QUESTÃO CORRETA:</label>
+
+                            <div className='alternativa' >
+                                <textarea placeholder='Digite o gabarito' value={gabarito} onChange={(e) => setGabarito(e.target.value)}></textarea>
+                            </div>
+
+                        </div>
+
+                        {/*MODELO ANTIGO 
 
                         <div className='container-alternativas'>
 
@@ -228,6 +309,8 @@ export default function RegisterQuestion() {
 
                         </div>
 
+                        */}
+
                         <div className='area-btn-other'>
 
                             <button className='btn-save' onClick={handleCancel}>CANCELAR</button>
@@ -239,7 +322,9 @@ export default function RegisterQuestion() {
 
 
 
+
                 </div>
+
 
             </div>
 

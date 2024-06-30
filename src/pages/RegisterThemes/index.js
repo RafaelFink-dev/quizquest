@@ -76,7 +76,7 @@ export default function RegisterThemes() {
         await addDoc(collection(db, 'tematicas'), {
             created: new Date(),
             nomeTematica: tematica,
-            curso: cursos[courseSelected].nomeCurso,
+            curso: cursos[courseSelected]
         })
             .then(() => {
                 toast.success('Temática registrada!')
