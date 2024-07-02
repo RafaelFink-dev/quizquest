@@ -97,6 +97,7 @@ export default function RegisterQuestion() {
             return;
         }
 
+
         await addDoc(collection(db, 'perguntas'), {
             pergunta: question,
             respostas: answers,

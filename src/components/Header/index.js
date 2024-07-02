@@ -20,7 +20,7 @@ export default function Header() {
                 <img src={user.avatarUrl === null ? avatarImg : user.avatarUrl} alt="Foto do usuário" />
                 <h2>Seja bem-vindo(a):</h2>
                 <h2>{user.nome}</h2>
-                <h3>Sua pontuação: 426 pontos</h3>
+                <h3>Sua pontuação: {user.pontos} pontos</h3>
             </div>
 
             <div className="sidebar-middle">
@@ -29,12 +29,12 @@ export default function Header() {
                     HOME
                 </Link>
 
-                <Link to='#'>
+                <Link to='/quiz'>
                     <FiHelpCircle color='#121212' size={24} />
                     QUIZ
                 </Link>
 
-                <Link to='#'>
+                <Link to='/ranking'>
                     <FiBarChart color='#121212' size={24} />
                     RANKING
                 </Link>

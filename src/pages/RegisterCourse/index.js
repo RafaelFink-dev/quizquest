@@ -1,4 +1,4 @@
-
+import './registerCourse.css'
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 
@@ -39,6 +39,8 @@ export default function RegisterCourse() {
         })
         .then(() => {
             toast.success('Curso adicionado!')
+            setCurso('');
+            setAreaConhecimento(0);
         })
         .catch(() => {
             toast.error('Erro ao adicionar curso!')

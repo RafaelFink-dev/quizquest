@@ -203,7 +203,8 @@ function AuthProvider({ children }) {
                     email: docSnap.data().email,
                     instituicao: docSnap.data().instituicao,
                     professor: docSnap.data().professor,
-                    avatarUrl: docSnap.data().avatarUrl
+                    avatarUrl: docSnap.data().avatarUrl,
+                    pontos: docSnap.data().pontos
                 };
 
                 setUser(data);

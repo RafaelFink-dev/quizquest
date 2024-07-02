@@ -38,7 +38,7 @@ export default function PrivateArea() {
                             CADASTRAR TEMÁTICAS
                         </Link>
 
-                        <Link to='#' style={{backgroundColor: '#d3d3d3', pointerEvents: 'none' }}>
+                        <Link to='/viewIndicators'>
                             VISUALIZAR INDICADORES
                         </Link>
 

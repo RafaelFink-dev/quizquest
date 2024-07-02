@@ -13,6 +13,9 @@ import RegisterClass from '../pages/RegisterClass';
 import RegisterCourse from '../pages/RegisterCourse';
 import RegisterQuestion from '../pages/RegisterQuestion';
 import RegisterQuiz from '../pages/RegisterQuiz';
+import ViewIndicators from '../pages/ViewIndicators';
+import Quizes from '../pages/Quizes';
+import Ranking from '../pages/Ranking';
 
 
 
@@ -33,6 +36,9 @@ function RoutesApp() {
             <Route path="/registerCourse" element={ <Private> <RegisterCourse /> </Private> } />
             <Route path="/registerQuestion" element={ <Private> <RegisterQuestion /> </Private> } />
             <Route path="/registerQuiz" element={ <Private> <RegisterQuiz /> </Private> } />
+            <Route path="/viewIndicators" element={ <Private> <ViewIndicators /> </Private> } />
+            <Route path="/quiz" element={ <Private> <Quizes /> </Private> } />
+            <Route path="/ranking" element={ <Private> <Ranking /> </Private> } />
             
 
         </Routes>
