@@ -1,0 +1,117 @@
+  
+  .home-content {
+    margin-left: 270px;
+    padding: 1px 16px;
+    height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .home-container {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    height: 100%; /* Para garantir que o contêiner ocupe toda a altura disponível */
+    flex-direction: row;
+    box-sizing: border-box;
+  }
+  
+  .home-div-left {
+    background-color: #FFF;
+    flex: 1;
+    border-radius: 6px;
+    height: 99%; /* Para garantir que os filhos ocupem toda a altura do contêiner */
+    box-sizing: border-box;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .home-div-right {
+    background-color: #FFF;
+    flex: 1;
+    border-radius: 6px;
+    max-height: 24%; /* Para garantir que os filhos ocupem toda a altura do contêiner */
+    box-sizing: border-box;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .indicators{
+    padding: 20px;
+  }
+
+  .header-indicators{
+    background-color: #FF8820;
+    border-radius: 6px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .header-indicators h1{
+    text-align: center;
+    color: #FFF;
+    font-style: italic;
+  }
+
+  .header-infos{
+    background-color: #FF8820;
+    border-radius: 6px;
+    height: 30px;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #3F97AF;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header-infos h1{
+    color: #FFF;
+    font-size: 18px;
+    font-style: italic;
+  }
+  
+
+  .indicators-quiz{
+    background-color: #FFF;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .indicators-title{
+    display: flex;
+    border-radius: 6px;
+  }
+
+  .indicators-title h1{
+    font-size: 18px;
+    margin-top: 3px;
+  }
+
+  .indicators-infos{
+    background-color: #FF8820;
+    margin-top: 10px;
+    border-radius: 6px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn-save-indicator{
+    width: 95%;
+    height: 40px;
+    background-color: #FFF;
+    color: #121212;
+    border: none;
+    border-radius: 6px;
+  }
+
+  .btn-save-indicator label{
+    font-size: 18px;
+    font-weight: bold;
+    font-style: italic;
+  }
