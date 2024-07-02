@@ -3,7 +3,7 @@ import './home.css';
 import { AuthContext } from '../../contexts/auth';
 import { useContext } from 'react';
 
-import { FiBarChart } from 'react-icons/fi';
+import { FiHome } from 'react-icons/fi';
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 
@@ -19,7 +19,7 @@ export default function Home() {
             <div className='content'>
 
                 <Title name='HOME'>
-                    <FiBarChart size={24} />
+                    <FiHome size={24} />
                 </Title>
 
 
