@@ -4,22 +4,29 @@ import { getDocs, collection } from 'firebase/firestore';
 import { db } from '../../services/firebaseConnection';
 import { useEffect, useState } from 'react';
 
-import { FiHome, FiClipboard } from 'react-icons/fi';
+import { FiHome, FiClipboard, FiBarChart } from 'react-icons/fi';
 import Header from '../../components/Header';
 import Title from '../../components/Title';
+
+import { Link } from 'react-router-dom';
 
 
 export default function Home() {
 
-    const listRef = collection(db, 'users');
+    const listRefUsers = collection(db, 'users');
+    const listRefQuizes = collection(db, 'quizzes');
     const [users, setUsers] = useState(0);
+    const [quizes, setQuizes] = useState(0);
     const [loadUsers, setLoadUsers] = useState(true);
+    const [loadQuizes, setLoadQuizes] = useState(true);
+
+
 
     useEffect(() => {
 
         //BUSCANDO QUANTIDADE DE USUARIOS - TALVEZ COLOCAR O ONSNAPSHOT PARA FICAR OLHANDO O BANCO MAS NAO VEJO NECESSIDADE
         async function loadUsers() {
-            const querySnapshot = await getDocs(listRef)
+            const querySnapshot = await getDocs(listRefUsers)
                 .then((snapshot) => {
 
                     setUsers(snapshot.docs.length);
@@ -35,7 +42,26 @@ export default function Home() {
                 })
         }
 
+        async function loadQuizes() {
+            const querySnapshot = await getDocs(listRefQuizes)
+                .then((snapshot) => {
+
+                    setQuizes(snapshot.docs.length);
+                    setLoadQuizes(false);
+
+                })
+                .catch((e) => {
+
+                    console.log(e);
+                    setLoadQuizes(false);
+                    setQuizes(0);
+
+                })
+        }
+
+
         loadUsers();
+        loadQuizes();
 
 
     }, [])
@@ -53,7 +79,10 @@ export default function Home() {
                 <div className='home-container'>
 
                     <div className='home-div-left'>
-                        <h1>ESQUERDA</h1>
+                        <div className='ranking-title'>
+                            <FiBarChart size={24} />
+                            <h1>CONFIRA O RANKING DOS MELHORES COLOCADOS:</h1>
+                        </div>
                     </div>
 
                     <div className='home-div-right'>
@@ -71,7 +100,7 @@ export default function Home() {
                                     loadUsers ? (
                                         <h1>CARREGANDO..</h1>
                                     ) : (
-                                        
+
                                         <h1>{users}</h1>
                                     )
                                 }
@@ -81,7 +110,16 @@ export default function Home() {
 
                             <div className='header-infos'>
                                 <h1>TOTAL DE QUIZES CADASTRADOS:</h1>
-                                <h1>0</h1>
+
+                                {
+                                    loadQuizes ? (
+                                        <h1>CARREGANDO..</h1>
+                                    ) : (
+
+                                        <h1>{quizes}</h1>
+                                    )
+                                }
+
                             </div>
 
                         </div>
@@ -94,7 +132,11 @@ export default function Home() {
                             </div>
 
                             <div className='indicators-infos'>
-                                <button type='submit' className='btn-save-indicator'><label>CLIQUE AQUI E CONFIRA</label></button>
+                                <div>
+                                    <Link to='/quiz'>
+                                        CLIQUE AQUI E CONFIRA
+                                    </Link>
+                                </div>
                             </div>
 
                         </div>

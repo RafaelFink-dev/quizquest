@@ -38,7 +38,7 @@ export default function PrivateArea() {
                             CADASTRAR TEMÁTICAS
                         </Link>
 
-                        <Link to='/viewIndicators'>
+                        <Link to='/viewIndicators' style={{backgroundColor: '#e8e8e8', pointerEvents: 'none'}}>
                             VISUALIZAR INDICADORES
                         </Link>
 
@@ -49,6 +49,7 @@ export default function PrivateArea() {
                         <Link to='/registerClass'>
                             CADASTRAR TURMAS
                         </Link>
+                        
 
                     </div>
 

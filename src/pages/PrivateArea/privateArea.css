@@ -15,6 +15,7 @@
 .container-options a {
   padding: 12px 20px;
   font-size: 18px;
+  width: 320px;
   font-weight: bold;
   text-decoration: none;
   color: #FFF;
@@ -22,6 +23,7 @@
   border-radius: 4px;
   margin-bottom: 10px; /* Adiciona margem inferior para evitar sobreposição */
   transition: all 0.5s;
+  text-align: center;
 }
 
 .container-options a:hover {

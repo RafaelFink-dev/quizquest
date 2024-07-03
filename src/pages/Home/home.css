@@ -1,4 +1,3 @@
-  
   .home-content {
     margin-left: 270px;
     padding: 1px 16px;
@@ -7,21 +6,23 @@
     display: flex;
     flex-direction: column;
   }
-  
+
   .home-container {
     display: flex;
     gap: 10px;
     width: 100%;
-    height: 100%; /* Para garantir que o contêiner ocupe toda a altura disponível */
+    height: 100%;
+    /* Para garantir que o contêiner ocupe toda a altura disponível */
     flex-direction: row;
     box-sizing: border-box;
   }
-  
+
   .home-div-left {
     background-color: #FFF;
     flex: 1;
     border-radius: 6px;
-    height: 99%; /* Para garantir que os filhos ocupem toda a altura do contêiner */
+    height: 99%;
+    /* Para garantir que os filhos ocupem toda a altura do contêiner */
     box-sizing: border-box;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
@@ -30,16 +31,17 @@
     background-color: #FFF;
     flex: 1;
     border-radius: 6px;
-    max-height: 24%; /* Para garantir que os filhos ocupem toda a altura do contêiner */
+    max-height: 24%;
+    /* Para garantir que os filhos ocupem toda a altura do contêiner */
     box-sizing: border-box;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 
-  .indicators{
+  .indicators {
     padding: 20px;
   }
 
-  .header-indicators{
+  .header-indicators {
     background-color: #FF8820;
     border-radius: 6px;
     height: 70px;
@@ -48,13 +50,13 @@
     align-items: center;
   }
 
-  .header-indicators h1{
+  .header-indicators h1 {
     text-align: center;
     color: #FFF;
     font-style: italic;
   }
 
-  .header-infos{
+  .header-infos {
     background-color: #FF8820;
     border-radius: 6px;
     height: 30px;
@@ -66,14 +68,14 @@
     justify-content: space-between;
   }
 
-  .header-infos h1{
+  .header-infos h1 {
     color: #FFF;
     font-size: 18px;
     font-style: italic;
   }
-  
 
-  .indicators-quiz{
+
+  .indicators-quiz {
     background-color: #FFF;
     margin-top: 20px;
     padding: 20px;
@@ -81,17 +83,17 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 
-  .indicators-title{
+  .indicators-title {
     display: flex;
     border-radius: 6px;
   }
 
-  .indicators-title h1{
+  .indicators-title h1 {
     font-size: 18px;
     margin-top: 3px;
   }
 
-  .indicators-infos{
+  .indicators-infos {
     background-color: #FF8820;
     margin-top: 10px;
     border-radius: 6px;
@@ -101,17 +103,38 @@
     align-items: center;
   }
 
-  .btn-save-indicator{
+  .indicators-infos div {
+    background-color: #FFF;
     width: 95%;
     height: 40px;
-    background-color: #FFF;
-    color: #121212;
-    border: none;
     border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.5s;
   }
 
-  .btn-save-indicator label{
-    font-size: 18px;
+  .indicators-infos div:hover {
+    background-color: #f1f1f1;
+
+  }
+
+  .indicators-infos a {
+    color: #121212;
     font-weight: bold;
+    font-size: 17px;
     font-style: italic;
+    cursor: pointer;
+  }
+
+  .ranking-title {
+    display: flex;
+    border-radius: 6px;
+    padding: 15px;
+  }
+
+  .ranking-title h1 {
+    font-size: 18px;
+    margin-top: 3px;
   }
