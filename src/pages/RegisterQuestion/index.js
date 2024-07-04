@@ -113,7 +113,6 @@ export default function RegisterQuestion() {
                 setCorrectAnswer(null);
                 setGabarito('');
                 setTematicaSelected(0);
-                setDifficultySelected('Fácil');
             })
             .catch((error) => {
                 console.error('Erro ao adicionar questão: ', error);

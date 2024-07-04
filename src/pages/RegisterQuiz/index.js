@@ -128,7 +128,8 @@ export default function RegisterQuiz() {
                 perguntas: selectedQuestions,
                 dificuldade: difficultySelected,
                 tempoResposta: time,
-                tematica: tematicaSelected
+                tematica: tematicaSelected,
+                acessos: 0
             });
             alert('Quiz adicionado com sucesso!');
             setQuizName('');
