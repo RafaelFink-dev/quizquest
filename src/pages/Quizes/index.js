@@ -5,8 +5,121 @@ import Title from '../../components/Title';
 
 import { FiHelpCircle } from 'react-icons/fi';
 
+import { useEffect, useState } from 'react';
+
+import { db } from '../../services/firebaseConnection';
+import { collection, getDocs, where, query } from 'firebase/firestore';
+
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 
 export default function Quizes() {
+
+    const listRef = collection(db, 'quizzes');
+    const listRefThemes = collection(db, 'tematicas');
+
+    const [quizzes, setQuizzes] = useState([]);
+
+    const [tematicas, setTematicas] = useState([]);
+    const [loadTematicas, setLoadTematicas] = useState(true);
+    const [tematicaSelected, setTematicaSelected] = useState(0);
+    const [reset, setReset] = useState(false);
+
+    const [difficultySelected, setDifficultySelected] = useState('Todos');
+
+
+    useEffect(() => {
+
+        async function loadQuizes() {
+
+            const querySnapshot = await getDocs(collection(db, "quizzes"));
+            const quizzesList = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setQuizzes(quizzesList);
+            console.log(quizzes)
+
+        };
+
+        loadQuizes();
+
+    }, [reset])
+
+    useEffect(() => {
+
+        async function loadThemes() {
+            const querySnapshot = await getDocs(listRefThemes)
+                .then((snapshot) => {
+                    //LISTA PARA ADD TEMÁTICAS
+                    let lista = []
+
+                    snapshot.forEach((theme) => {
+                        lista.push({
+                            id: theme.id,
+                            nomeTematica: theme.data().nomeTematica
+                        })
+                    })
+
+                    if (snapshot.docs.length === 0) {
+                        setTematicas([{ id: 1, nomeTematica: 'Nenhuma temática encontrada' }]);
+                        setLoadTematicas(false);
+                        return;
+                    }
+
+                    setTematicas(lista);
+                    setLoadTematicas(false);
+                })
+                .catch((e) => {
+                    console.log(e);
+                    setLoadTematicas(false);
+                    setTematicas([{ id: 1, nomeTematica: 'NENHUMA TEMÁTICA ENCONTRADA' }]);
+                })
+        }
+
+        loadThemes();
+
+    }, [])
+
+    async function loadQuizesFiltrados() {
+
+        if (difficultySelected !== 'Todos') {
+            const q = query(listRef, where('dificuldade', '==', difficultySelected));
+
+            const querySnapshot = await getDocs(q);
+            const quizzesList = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
+            setQuizzes(quizzesList);
+
+            return;
+        }
+
+        const q = query(listRef);
+
+        const querySnapshot = await getDocs(q);
+        const quizzesList = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        setQuizzes(quizzesList);
+        console.log(quizzes)
+
+    }
+
+
+    function handleChangeTheme(e) {
+        setTematicaSelected(e.target.value);
+    }
+
+    function handleChangeDifficulty(e) {
+        setDifficultySelected(e.target.value);
+    }
+
+
     return (
         <div>
 
@@ -17,6 +130,90 @@ export default function Quizes() {
                 <Title name='QUIZ'>
                     <FiHelpCircle size={24} />
                 </Title>
+
+                <div className='container-profile'>
+
+                    <div className='header' style={{ padding: 20 }}>
+
+                        <div className='div-theme'>
+                            <label>TEMÁTICA:</label>
+                            {
+                                loadTematicas ? (
+                                    <input
+                                        type='text'
+                                        disabled={true}
+                                        value='Carregando...'
+                                    />
+                                ) : (
+                                    <select value={tematicaSelected} onChange={handleChangeTheme} className='combo-nivel-ensino'>
+                                        {tematicas.map((item, index) => {
+                                            return (
+                                                <option key={index} value={index}>
+                                                    {item.nomeTematica}
+                                                </option>
+                                            )
+                                        })}
+                                    </select>
+                                )
+                            }
+                        </div>
+
+                        <div className='div-difficulty'>
+
+                            <label>DIFICULDADE:</label>
+                            <select value={difficultySelected} onChange={handleChangeDifficulty} className='combo-nivel-ensino'>
+                                <option value='Todos'>Todos</option>
+                                <option value='Fácil'>Fácil</option>
+                                <option value='Média'>Média</option>
+                                <option value='Difícil'>Difícil</option>
+                            </select>
+
+                        </div>
+
+                        <button className='btn-save' onClick={loadQuizesFiltrados} style={{ fontSize: 16 }}>FILTRAR</button>
+
+                    </div>
+
+                    <div className="quiz-list">
+                        {quizzes.map(quiz => (
+
+                            <div className='quiz-container'>
+
+                                <div className='quiz-title'>
+                                    <h1>{quiz.nome}</h1>
+                                </div>
+
+
+                                <div className='quiz-level'
+                                    style={{
+                                        backgroundColor:
+                                            quiz.dificuldade === 'Fácil' ? 'green' :
+                                                quiz.dificuldade === 'Média' ? 'yellow' :
+                                                    quiz.dificuldade === 'Difícil' ? 'red' : 'defaultColor',
+                                        color:
+                                            quiz.dificuldade === 'Fácil' ? '#FFF' :
+                                                quiz.dificuldade === 'Média' ? '#121212' :
+                                                    quiz.dificuldade === 'Difícil' ? '#FFF' : 'defaultColor'
+                                    }}
+                                >
+                                    <h1>{quiz.dificuldade.toUpperCase()}</h1>
+                                </div>
+
+
+                                <div className='quiz-acessos'>
+                                    <h1>TOTAL DE ACESSOS: 10001</h1>
+                                </div>
+
+
+                                <Link to='#' className='quiz-button'>ACESSAR QUIZ</Link>
+
+                            </div>
+
+
+                        ))}
+                    </div>
+
+                </div>
 
             </div>
 

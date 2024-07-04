@@ -12,7 +12,6 @@ import { db } from '../../services/firebaseConnection';
 import { collection, addDoc, getDocs, where, query } from 'firebase/firestore';
 
 import { toast } from 'react-toastify';
-import { set } from 'firebase/database';
 
 export default function RegisterQuiz() {
 
@@ -127,9 +126,9 @@ export default function RegisterQuiz() {
             await addDoc(collection(db, "quizzes"), {
                 nome: quizName,
                 perguntas: selectedQuestions,
-                dificuldade: 'teste',
-                tempoResposta: 5,
-                tematica: 'Ciencias agrarias'
+                dificuldade: difficultySelected,
+                tempoResposta: time,
+                tematica: tematicaSelected
             });
             alert('Quiz adicionado com sucesso!');
             setQuizName('');
