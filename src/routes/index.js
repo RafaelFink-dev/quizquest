@@ -16,6 +16,8 @@ import RegisterQuiz from '../pages/RegisterQuiz';
 import ViewIndicators from '../pages/ViewIndicators';
 import Quizes from '../pages/Quizes';
 import Ranking from '../pages/Ranking';
+import QuizStart from '../pages/QuizStart';
+import QuizInProgress from '../pages/QuizInProgress';
 
 
 
@@ -39,6 +41,11 @@ function RoutesApp() {
             <Route path="/viewIndicators" element={ <Private> <ViewIndicators /> </Private> } />
             <Route path="/quiz" element={ <Private> <Quizes /> </Private> } />
             <Route path="/ranking" element={ <Private> <Ranking /> </Private> } />
+            <Route path="/quiz-start/:id" element={ <Private> <QuizStart /> </Private> } />
+            <Route path="/quiz-in-progress/:id" element={ <Private> <QuizInProgress /> </Private> } />
+
+            {/*AQUI VAI O NOT FOUND */}
+            {/*<Route path="*" element={ <Private> <Home /> </Private> } />*/}
             
 
         </Routes>

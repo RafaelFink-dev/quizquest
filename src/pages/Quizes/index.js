@@ -131,7 +131,7 @@ export default function Quizes() {
                     <FiHelpCircle size={24} />
                 </Title>
 
-                <div className='container-profile'>
+                <div className='container-div-quiz'>
 
                     <div className='header' style={{ padding: 20 }}>
 
@@ -201,11 +201,11 @@ export default function Quizes() {
 
 
                                 <div className='quiz-acessos'>
-                                    <h1>TOTAL DE ACESSOS: 10001</h1>
+                                    <h1>TOTAL DE ACESSOS: {quiz.acessos}</h1>
                                 </div>
 
 
-                                <Link to='#' className='quiz-button'>ACESSAR QUIZ</Link>
+                                <Link to={`/quiz-start/${quiz.id}`}  className='quiz-button'>ACESSAR QUIZ</Link>
 
                             </div>
 

@@ -124,12 +124,13 @@ export default function RegisterQuiz() {
 
         try {
             await addDoc(collection(db, "quizzes"), {
-                nome: quizName,
+                nome: quizName.toUpperCase(),
                 perguntas: selectedQuestions,
-                dificuldade: difficultySelected,
+                dificuldade: difficultySelected.toUpperCase(),
                 tempoResposta: time,
-                tematica: tematicaSelected,
-                acessos: 0
+                tematica: tematicas[tematicaSelected].toUpperCase(),
+                acessos: 0,
+                quantidadePerguntas: quantidadePerguntas
             });
             alert('Quiz adicionado com sucesso!');
             setQuizName('');

@@ -99,12 +99,12 @@ export default function RegisterQuestion() {
 
 
         await addDoc(collection(db, 'perguntas'), {
-            pergunta: question,
-            respostas: answers,
+            pergunta: question.toUpperCase(),
+            respostas: answers.toUpperCase(),
             resposta_correta: correctAnswer,
-            gabarito: gabarito,
-            dificuldade: difficultySelected,
-            tematica: tematicas[tematicaSelected]
+            gabarito: gabarito.toUpperCase(),
+            dificuldade: difficultySelected.toUpperCase(),
+            tematica: tematicas[tematicaSelected].toUpperCase()
         })
             .then(() => {
                 toast.success('Questão adicionada com sucesso!');
@@ -112,7 +112,6 @@ export default function RegisterQuestion() {
                 setAnswers(['', '', '', '']);
                 setCorrectAnswer(null);
                 setGabarito('');
-                setTematicaSelected(0);
             })
             .catch((error) => {
                 console.error('Erro ao adicionar questão: ', error);
