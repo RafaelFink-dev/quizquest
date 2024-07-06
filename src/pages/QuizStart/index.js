@@ -7,7 +7,7 @@ import { FiHelpCircle } from 'react-icons/fi';
 import { useEffect, useState } from 'react';
 
 import { db } from '../../services/firebaseConnection';
-import { collection, getDoc, doc } from 'firebase/firestore';
+import { collection, getDoc, doc, updateDoc } from 'firebase/firestore';
 
 import { useParams, Link } from "react-router-dom";
 
@@ -37,6 +37,17 @@ export default function QuizStart({ conteudo }) {
 
     }, [])
 
+    async function handleAddAcess() {
+
+        const docRef = doc(db, 'quizzes', id)
+        const docSnap = await getDoc(docRef);
+        
+        await updateDoc(docRef, {
+            acessos:  1 + docSnap.data().acessos 
+        })
+    }
+
+
     return (
         <div>
 
@@ -57,10 +68,9 @@ export default function QuizStart({ conteudo }) {
                             <label>DIFICULDADE: {quiz.dificuldade}</label>
                             <label>TEMPO PARA RESPONDER O QUIZ: {quiz.tempoResposta}</label>
                         </div>
-                        
-                        <Link to={'#'} className='quiz-st-button'>INICIAR QUIZ</Link>
-                        {/*<Link to={`/quiz-in-progress/${id}`} className='quiz-st-button'>INICIAR QUIZ</Link>*/}
-                        <Link to={'/quiz'} className='quiz-st-button' style={{backgroundColor: '#FF8820'}}>VOLTAR A TELA INICIAL</Link>
+
+                        <Link to={`/quiz-in-progress/${id}`} className='quiz-st-button' onClick={handleAddAcess}>INICIAR QUIZ</Link>
+                        <Link to={'/quiz'} className='quiz-st-button' style={{ backgroundColor: '#FF8820' }}>VOLTAR A TELA INICIAL</Link>
 
                     </div>
 
