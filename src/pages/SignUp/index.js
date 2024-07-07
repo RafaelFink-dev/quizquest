@@ -29,7 +29,7 @@ export default function SignUp() {
 
     async function handleRegister(e) {
         e.preventDefault(); //Previni att pagina ou enviar dados para outra
-        
+
         if (instituicao) {
             if (usuario !== '' && email !== '' && password !== '' && endereco !== '' && nivelDeEnsino !== '') {
                 await signUp(email, password, usuario, instituicao, endereco, nivelDeEnsino)
@@ -40,7 +40,7 @@ export default function SignUp() {
             return;
         }
 
-        if (usuario !== '' && email !== '' && password !== '' ) {
+        if (usuario !== '' && email !== '' && password !== '') {
             await signUp(email, password, usuario)
         } else {
             toast.warn('Preencha todos os campos!')
@@ -79,10 +79,19 @@ export default function SignUp() {
                             <div className='div-cnpj'>
                                 <label>CNPJ:</label>
                                 <input
-                                    type='number'
+                                    type='text'
                                     placeholder='00.000.000/0000-00'
                                     value={cnpj}
-                                    onChange={(e) => setCNPJ(e.target.value)}
+                                    maxLength={18}
+                                    onChange={(e) => {
+                                        let formattedCNPJ = e.target.value.replace(/[^\d]/g, ''); // Remove todos os caracteres não numéricos
+                                        if (formattedCNPJ.length > 14) {
+                                            formattedCNPJ = formattedCNPJ.substring(0, 14); // Limita a 14 caracteres
+                                        }
+                                        // Formata o CNPJ com pontos e traços
+                                        formattedCNPJ = formattedCNPJ.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+                                        setCNPJ(formattedCNPJ);
+                                    }}
                                 />
                             </div>
                         ) : (

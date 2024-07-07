@@ -83,107 +83,151 @@ function AuthProvider({ children }) {
 
         if (instituicao) {
 
-            await createUserWithEmailAndPassword(auth, email, password)
-                //Caso de sucesso
-                .then(async (value) => {
+            await api.get(`&email=${email}`, {
+                params: {
+                    key: 'a3YTEaF0ibJ0ORV8XUiLMAVdC75cW7SAJMVD'
+                }
+            })
+                .then(async (response) => {
 
-                    let uid = value.user.uid;
+                    if (response.data.email_status === 'VALID') {
+                        await createUserWithEmailAndPassword(auth, email, password)
+                            //Caso de sucesso
+                            .then(async (value) => {
 
-                    await setDoc(doc(db, 'users', uid), {
-                        nome: name,
-                        email: email,
-                        instituicao: instituicao,
-                        endereco: endereco,
-                        nivelDeEnsino: nivelDeEnsino,
-                        avatarUrl: null
-                    })
-                        .then(() => {
+                                let uid = value.user.uid;
 
-                            /*let data = {
-                                uid: uid,
-                                nome: name,
-                                email: value.user.email,
-                                instituicao: instituicao,
-                                endereco: endereco,
-                                nivelDeEnsino: nivelDeEnsino,
-                                avatarUrl: null
-                            };
+                                await setDoc(doc(db, 'users', uid), {
+                                    nome: name,
+                                    email: email,
+                                    instituicao: instituicao,
+                                    endereco: endereco,
+                                    nivelDeEnsino: nivelDeEnsino,
+                                    avatarUrl: null
+                                })
+                                    .then(() => {
 
-                            storageUser(data);
-                            //setUser(data); talvez nao seja necessario passar isso quando cadastrar só depois de logar*/
-                            setLoadingAuth(false);
-                            toast.success('Cadastro efetuado, faça login!')
-                            navigate('/')
+                                        /*let data = {
+                                            uid: uid,
+                                            nome: name,
+                                            email: value.user.email,
+                                            instituicao: instituicao,
+                                            endereco: endereco,
+                                            nivelDeEnsino: nivelDeEnsino,
+                                            avatarUrl: null
+                                        };
+            
+                                        storageUser(data);
+                                        //setUser(data); talvez nao seja necessario passar isso quando cadastrar só depois de logar*/
+                                        setLoadingAuth(false);
+                                        toast.success('Cadastro efetuado, faça login!')
+                                        navigate('/')
 
-                        })
-                })
-                .catch((error) => {
+                                    })
+                            })
+                            .catch((error) => {
 
-                    if (error.code === 'auth/weak-password') {
-                        toast.warn('A senha deve ter no mínimo 6 digitos!')
-                        console.log(error.code)
-                        setLoadingAuth(false);
+                                if (error.code === 'auth/weak-password') {
+                                    toast.warn('A senha deve ter no mínimo 6 digitos!')
+                                    console.log(error.code)
+                                    setLoadingAuth(false);
+                                }
+
+                                if (error.code === 'auth/email-already-in-use') {
+                                    toast.warn('E-mail já esta em uso!')
+                                    console.log(error.code)
+                                    setLoadingAuth(false);
+                                }
+
+                                setLoadingAuth(false);
+                            })
+                    }
+                    else {
+                        toast.warn('E-mail invalido!')
+                        setLoadingAuth(false)
+                        return;
                     }
 
-                    if (error.code === 'auth/email-already-in-use') {
-                        toast.warn('E-mail já esta em uso!')
-                        console.log(error.code)
-                        setLoadingAuth(false);
-                    }
 
-                    setLoadingAuth(false);
                 })
+                .catch(() => {
+                    console.log("Erro ao validar e-mail");
+                    return;
+                })
+
+
 
             return;
         }
 
-        //CASO NAO FOR INSTITUIÇÃO É ALUNO--MODELO ORIGINAL
-        await createUserWithEmailAndPassword(auth, email, password)
-            //Caso de sucesso
-            .then(async (value) => {
 
-                let uid = value.user.uid;
+        await api.get(`&email=${email}`, {
+            params: {
+                key: 'a3YTEaF0ibJ0ORV8XUiLMAVdC75cW7SAJMVD'
+            }
+        })
+            .then(async (response) => {
 
-                await setDoc(doc(db, 'users', uid), {
-                    nome: name,
-                    email: email,
-                    aluno: true,
-                    avatarUrl: null
-                })
-                    .then(() => {
+                if (response.data.email_status === 'VALID') {
+                    //CASO NAO FOR INSTITUIÇÃO É ALUNO--MODELO ORIGINAL
+                    await createUserWithEmailAndPassword(auth, email, password)
+                        //Caso de sucesso
+                        .then(async (value) => {
 
-                        /*let data = {
-                            uid: uid,
-                            nome: name,
-                            email: value.user.email,
-                            aluno: true,
-                            avatarUrl: null
-                        };
+                            let uid = value.user.uid;
 
-                        storageUser(data);
-                        setUser(data); talvez nao seja necessario passar isso quando cadastrar só depois de logar*/
-                        setLoadingAuth(false);
-                        toast.success('Cadastro efetuado, faça login!')
-                        navigate('/')
+                            await setDoc(doc(db, 'users', uid), {
+                                nome: name,
+                                email: email,
+                                aluno: true,
+                                avatarUrl: null
+                            })
+                                .then(() => {
 
-                    })
-            })
-            .catch((error) => {
+                                    /*let data = {
+                                        uid: uid,
+                                        nome: name,
+                                        email: value.user.email,
+                                        aluno: true,
+                                        avatarUrl: null
+                                    };
+            
+                                    storageUser(data);
+                                    setUser(data); talvez nao seja necessario passar isso quando cadastrar só depois de logar*/
+                                    setLoadingAuth(false);
+                                    toast.success('Cadastro efetuado, faça login!')
+                                    navigate('/')
 
-                if (error.code === 'auth/weak-password') {
-                    toast.warn('A senha deve ter no mínimo 6 digitos!')
-                    console.log(error.code)
-                    setLoadingAuth(false);
+                                })
+                        })
+                        .catch((error) => {
+
+                            if (error.code === 'auth/weak-password') {
+                                toast.warn('A senha deve ter no mínimo 6 digitos!')
+                                console.log(error.code)
+                                setLoadingAuth(false);
+                            }
+
+                            if (error.code === 'auth/email-already-in-use') {
+                                toast.warn('E-mail já esta em uso!')
+                                console.log(error.code)
+                                setLoadingAuth(false);
+                            }
+
+                            setLoadingAuth(false);
+                        })
+                } else {
+                    toast.warn('E-mail invalido!')
+                    setLoadingAuth(false)
+                    return;
                 }
 
-                if (error.code === 'auth/email-already-in-use') {
-                    toast.warn('E-mail já esta em uso!')
-                    console.log(error.code)
-                    setLoadingAuth(false);
-                }
-
-                setLoadingAuth(false);
             })
+            .catch(() => {
+                console.log("Erro ao validar e-mail");
+                return;
+            })
+
     }
 
     //LOGANDO USUÁRIO

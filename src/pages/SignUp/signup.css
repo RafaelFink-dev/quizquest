@@ -19,6 +19,10 @@
     flex-direction: column;
 }
 
+.div-cnpj select{
+    max-width: 100%;
+}
+
 .login input, textarea, select{
     margin-bottom: 1em;
     padding: 0.7em;
