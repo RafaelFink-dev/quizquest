@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswor
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api'
 
 export const AuthContext = createContext({});
 
@@ -229,23 +230,41 @@ function AuthProvider({ children }) {
     async function ResetPassword(email) {
         setLoadingAuth(true);
 
-        sendPasswordResetEmail(auth, email)
-            .then(() => {
-                toast.success('E-mail de redefinição enviado com sucesso!')
-                navigate('/')
-                setLoadingAuth(false);
+        await api.get(`&email=${email}`, {
+            params: {
+                key: 'a3YTEaF0ibJ0ORV8XUiLMAVdC75cW7SAJMVD'
+            }
+        })
+            .then((response) => {
+                console.log(email)
+                console.log(response.data.email_status)
+                if (response.data.email_status === 'INVALID') {
+                    toast.warn('E-mail invalido!')
+                    setLoadingAuth(false)
+                    return;
+                } else {
+                    sendPasswordResetEmail(auth, email)
+                        .then(() => {
+                            toast.success('E-mail de redefinição enviado com sucesso!')
+                            navigate('/')
+                            setLoadingAuth(false);
+                        })
+                        .catch((error) => {
+                            toast.error("Erro ao enviar e-mail de redefinição");
+                            setLoadingAuth(false);
+                        })
+                }
             })
-            .catch((error) => {
-                toast.error("Erro ao enviar e-mail de redefinição");
-                setLoadingAuth(false);
+            .catch(() => {
+                console.log("Erro ao validar e-mail");
+                return;
             })
-
 
     }
 
-     //ENVIAR EMAIL SENHA PROFESSOR
+    //ENVIAR EMAIL SENHA PROFESSOR
 
-     async function ResetPasswordTeacher(email) {
+    async function ResetPasswordTeacher(email) {
         setLoadingAuth(true);
 
         sendPasswordResetEmail(auth, email)
@@ -260,6 +279,7 @@ function AuthProvider({ children }) {
 
 
     }
+
 
     //DESLOGAR USUARIO
 
