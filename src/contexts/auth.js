@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api'
 
+
 export const AuthContext = createContext({});
 
 function AuthProvider({ children }) {
@@ -46,35 +47,60 @@ function AuthProvider({ children }) {
     async function handleRegisterTeacher(email, password, name) {
         setLoadingAuth(true);
 
-        await createUserWithEmailAndPassword(auth, email, password)
-            //Caso de sucesso
-            .then(async (value) => {
+        await api.get(`&email=${email}`, {
+            params: {
+                key: 'a3YTEaF0ibJ0ORV8XUiLMAVdC75cW7SAJMVD'
+            }
+        })
+            .then(async (response) => {
 
-                let uid = value.user.uid;
+                if (response.data.email_status === 'VALID') {
+                    await createUserWithEmailAndPassword(auth, email, password)
+                        //Caso de sucesso
+                        .then(async (value) => {
 
-                await setDoc(doc(db, 'users', uid), {
-                    nome: name,
-                    email: email,
-                    professor: true,
-                    avatarUrl: null
-                })
-                    .then(() => {
+                            let uid = value.user.uid;
 
-                        setLoadingAuth(false);
-                        toast.success('Professor cadastrado com sucesso!')
+                            await setDoc(doc(db, 'users', uid), {
+                                nome: name,
+                                email: email,
+                                professor: true,
+                                avatarUrl: null,
+                                pontos: 0
+                            })
+                                .then(() => {
 
-                    })
-            })
-            .catch((error) => {
 
-                if (error.code === 'auth/email-already-in-use') {
-                    toast.warn('E-mail já esta em uso!')
-                    console.log(error.code)
-                    setLoadingAuth(false);
+                                    setLoadingAuth(false);
+                                    toast.success('Professor cadastrado com sucesso!')
+                                    ResetPasswordTeacher(email);
+                                    return
+                                })
+
+                        })
+                        .catch((error) => {
+
+                            if (error.code === 'auth/email-already-in-use') {
+                                toast.warn('E-mail já esta em uso!')
+                                console.log(error.code)
+                                setLoadingAuth(false);
+                            }
+
+                            setLoadingAuth(false);
+                        })
+                }
+                else {
+                    toast.warn('E-mail invalido!')
+                    setLoadingAuth(false)
                 }
 
-                setLoadingAuth(false);
+
             })
+            .catch(() => {
+                console.log("Erro ao validar e-mail");
+            })
+
+
     }
 
     //Cadastrar usuário aluno/instituicao
@@ -103,22 +129,11 @@ function AuthProvider({ children }) {
                                     instituicao: instituicao,
                                     endereco: endereco,
                                     nivelDeEnsino: nivelDeEnsino,
-                                    avatarUrl: null
+                                    avatarUrl: null,
+                                    pontos: 0
                                 })
                                     .then(() => {
 
-                                        /*let data = {
-                                            uid: uid,
-                                            nome: name,
-                                            email: value.user.email,
-                                            instituicao: instituicao,
-                                            endereco: endereco,
-                                            nivelDeEnsino: nivelDeEnsino,
-                                            avatarUrl: null
-                                        };
-            
-                                        storageUser(data);
-                                        //setUser(data); talvez nao seja necessario passar isso quando cadastrar só depois de logar*/
                                         setLoadingAuth(false);
                                         toast.success('Cadastro efetuado, faça login!')
                                         navigate('/')
@@ -180,20 +195,11 @@ function AuthProvider({ children }) {
                                 nome: name,
                                 email: email,
                                 aluno: true,
-                                avatarUrl: null
+                                avatarUrl: null,
+                                pontos: 0
                             })
                                 .then(() => {
 
-                                    /*let data = {
-                                        uid: uid,
-                                        nome: name,
-                                        email: value.user.email,
-                                        aluno: true,
-                                        avatarUrl: null
-                                    };
-            
-                                    storageUser(data);
-                                    setUser(data); talvez nao seja necessario passar isso quando cadastrar só depois de logar*/
                                     setLoadingAuth(false);
                                     toast.success('Cadastro efetuado, faça login!')
                                     navigate('/')

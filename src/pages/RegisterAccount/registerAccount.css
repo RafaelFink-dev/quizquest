@@ -1,14 +1,14 @@
 .form-profile .obs1 {
     font-style: italic;
     font-weight: bold;
-    width: 400px;
+    max-width: 400px;
 }
 
 
 .form-profile .obs2 {
     font-style: italic;
     font-weight: 400;
-    width: 400px;
+    max-width: 400px;
     text-align: center;
 }
 
@@ -25,4 +25,11 @@
 
 .form-profile button:not(:first-child) {
     margin-left: 10px;
+}
+
+@media screen and (max-width: 400px) {
+    .btn-save{
+        font-size: 12px;
+        text-align: center;
+    }
 }

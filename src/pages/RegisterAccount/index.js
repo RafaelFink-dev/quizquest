@@ -11,28 +11,49 @@ import { FiUserPlus } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
+
+
 export default function RegisterAccount() {
 
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
-
+    
     const navigate = useNavigate();
 
-    const { ResetPasswordTeacher, handleRegisterTeacher, loadingAuth } = useContext(AuthContext);
+    const { handleRegisterTeacher, loadingAuth } = useContext(AuthContext);
 
     async function handleRegister(e) {
         e.preventDefault();
 
         if (email !== '' && nome !== '') {
 
-            const password = '123123'
+            const password = generatePassword(12);
 
             await handleRegisterTeacher(email, password, nome)
-            await ResetPasswordTeacher(email);
+
+            const successMessage = 'Professor cadastrado com sucesso!';
+
+            const toastContainer = document.querySelector('.Toastify__toast-container');
+            const lastToast = toastContainer?.lastChild?.innerText;
+
+            if (lastToast === successMessage) {
+                setEmail('');
+                setNome('');
+            }
 
         } else {
             toast.warn('Preencha todos os campos!')
         }
+    }
+
+    function generatePassword(length = 12) {
+        const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
+        let password = "";
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * charset.length);
+            password += charset[randomIndex];
+        }
+        return password;
     }
 
     function handleCancel() {
@@ -55,10 +76,10 @@ export default function RegisterAccount() {
 
                     <form className='form-profile' onSubmit={handleRegister}>
                         <label>NOME:</label>
-                        <input type='text' value={nome} onChange={(e) => setNome(e.target.value)} placeholder='Digite o nome'/>
+                        <input type='text' value={nome} onChange={(e) => setNome(e.target.value)} placeholder='Digite o nome' />
 
                         <label>EMAIL:</label>
-                        <input type='text' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Digite o e-mail'/>
+                        <input type='text' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Digite o e-mail' />
 
                         <label className='obs1'>OBSERVAÇÃO:</label>
                         <label className='obs2'>Ao finalizar o cadastro, será enviado um e-mail para definição de senha para o professor cadastrado!</label>
