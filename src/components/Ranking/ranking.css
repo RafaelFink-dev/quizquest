@@ -1,0 +1,85 @@
+.container-ranking {
+    padding: 15px;
+}
+
+.loading-ranking {
+    text-align: center;
+}
+
+.title-ranking-div {
+    background-color: #3F97AF;
+    padding: 18px;
+    height: 60px;
+    border-radius: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: -20px;
+
+}
+
+
+.title-ranking-div div {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: #FFF;
+    width: 100%;
+    border-radius: 38px;
+    align-items: center;
+    padding: 5px;    
+}
+
+
+.title-ranking-div div h1 {
+    font-size: 25px;
+}
+
+
+.list-ranking {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    margin-top: 20px;
+}
+
+.list-ranking-div-nome {
+    font-size: 13px;
+}
+
+.list-ranking-div-posicao {
+    background-color: #FFF;
+    border-radius: 50%;
+    margin: 10px;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.list-ranking-div {
+    background-color: #3F97AF;
+    border-radius: 38px;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    height: 60px;
+}
+
+.list-ranking-div-pontos {
+    background-color: #FFF;
+    width: 150px;
+    height: 40px;
+    border-radius: 22px;
+    font-style: italic;
+    font-weight: bold;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
