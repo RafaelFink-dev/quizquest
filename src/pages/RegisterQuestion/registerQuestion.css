@@ -36,23 +36,6 @@
     resize: none;
 }
 
-/*
-.container-alternativas{
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    height: 80px;
-}
-
-.container-alternativas div{
-    display: flex;
-    justify-content: space-between;
-}
-
-.checkbox-container{
-    gap: 7px;
-}*/
-
 .area-btn-other{
     max-width: 100%;
     display: flex;
@@ -82,3 +65,15 @@
 .correta label{
     margin-right: 8px;
 }
+
+@media screen and (max-width: 536px) {
+    .header-options{
+        flex-direction: column;
+    }
+
+    .div-themes{
+        max-width: 100%;
+    }
+
+}
+
