@@ -123,7 +123,7 @@ export default function Home() {
                                 {loadUsers ? (
                                     <span style={{ fontSize: 30, marginTop: 30, fontWeight: 'bold' }}>CARREGANDO RANKING...</span>
                                 ) : (
-                                    <Ranking listRanking={usersRanking} />
+                                    <Ranking listRanking={Array.isArray(usersRanking) ? usersRanking : []} />                                  
                                 )}
                             </div>
                         </div>

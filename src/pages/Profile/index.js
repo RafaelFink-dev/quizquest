@@ -5,11 +5,11 @@ import './profile.css'
 
 import { FiUser, FiUpload } from 'react-icons/fi';
 import avatar from '../../assets/avatar2.png';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../contexts/auth';
 import { toast } from 'react-toastify';
 
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDocs, collection, where, query } from 'firebase/firestore';
 import { db, storage } from '../../services/firebaseConnection';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -21,6 +21,137 @@ export default function Profile() {
     const [imageAvatar, setImageAvatar] = useState(null);
     const [nome, setNome] = useState(user && user.nome);
     const [email, setEmail] = useState(user && user.email);
+
+
+    //REFERENCIA PARA COLEÇÃO DE CURSOS
+    const listRef = collection(db, 'courses');
+    const listRefTurmas = collection(db, 'turmas');
+    const listRefInstituicao = collection(db, 'users');
+    const [cursos, setCursos] = useState([]);
+    const [loadCourses, setLoadCourses] = useState(true);
+    const [courseSelected, setCourseSelected] = useState(0);
+    const [turmas, setTurmas] = useState([]);
+    const [turmaSelected, setTurmaSelected] = useState(0);
+    const [instituicao, setInstituicao] = useState([]);
+    const [instituicaoSelected, setInstituicaoSelected] = useState(0);
+
+
+    useEffect(() => {
+
+        if (!user.instituicao) {
+
+
+            //CARREGAR CURSOS AO ABRIR A TELA
+            async function loadCourses() {
+                const querySnapshot = await getDocs(listRef)
+                    .then((snapshot) => {
+                        //LISTA PARA ADD CURSOS
+                        let lista = []
+
+                        snapshot.forEach((course) => {
+                            lista.push({
+                                id: course.id,
+                                nomeCurso: course.data().nomeCurso
+                            })
+                        })
+
+                        if (snapshot.docs.size === 0) {
+                            setCursos([{ id: 1, nomeCurso: 'NENHUM CURSO ENCONTRADO' }]);
+                            setLoadCourses(false);
+                            return;
+                        }
+
+                        setCursos(lista);
+                        setLoadCourses(false);
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                        setLoadCourses(false);
+                        setCursos([{ id: 1, nomeCurso: 'NENHUM CURSO ENCONTRADO' }]);
+                    })
+            }
+
+            async function loadTurmas() {
+                const querySnapshot = await getDocs(listRefTurmas)
+                    .then((snapshot) => {
+                        //LISTA PARA ADD CURSOS
+                        let lista = []
+
+                        snapshot.forEach((turma) => {
+                            lista.push({
+                                id: turma.id,
+                                nomeTurma: turma.data().nomeTurma
+                            })
+                        })
+
+                        if (snapshot.docs.size === 0) {
+                            setTurmas([{ id: 1, nomeTurma: 'NENHUMA TURMA ENCONTRADA' }]);
+                            setLoadCourses(false);
+                            return;
+                        }
+
+                        setTurmas(lista);
+                        setLoadCourses(false);
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                        setLoadCourses(false);
+                        setTurmas([{ id: 1, nomeTurma: 'NENHUMA TURMA ENCONTRADA' }]);
+                    })
+            }
+
+            async function loadInstituicao() {
+
+                const q = query(listRefInstituicao, where('instituicao', '==', true));
+
+                const querySnapshot = await getDocs(q)
+                    .then((snapshot) => {
+                        //LISTA PARA ADD CURSOS
+                        let lista = []
+
+                        snapshot.forEach((instituicao) => {
+                            lista.push({
+                                id: instituicao.id,
+                                nomeInstituicao: instituicao.data().nome
+                            })
+                        })
+
+                        if (snapshot.docs.size === 0) {
+                            setInstituicao([{ id: 1, nomeInstituicao: 'NENHUMA INSITUICAO ENCONTRADA' }]);
+                            setLoadCourses(false);
+                            return;
+                        }
+
+                        setInstituicao(lista);
+                        setLoadCourses(false);
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                        setLoadCourses(false);
+                        setInstituicao([{ id: 1, nomeInstituicao: 'NENHUMA INSITUICAO ENCONTRADA' }]);
+                    })
+            }
+
+            loadTurmas();
+            loadCourses();
+            loadInstituicao();
+        }
+
+    }, [])
+
+    function handleChangeCourse(e) {
+        setCourseSelected(e.target.value);
+    }
+
+    function handleChangeTurma(e) {
+        setTurmaSelected(e.target.value);
+    }
+
+    function handleChangeInstituicao(e) {
+        setInstituicaoSelected(e.target.value);
+    }
+
+
 
     function handleFile(e) {
         if (e.target.files[0]) {
@@ -142,25 +273,67 @@ export default function Profile() {
                         ) : (
                             <div className='form-profile-boolean'>
                                 <label>INSTITUIÇÃO DE ENSINO:</label>
-                                <select value={''} onChange={() => { }} className='combo-nivel-ensino'>
-                                    <option value='opçoes'>opções do banco</option>
-                                    <option value='opçoes'>opções do banco</option>
-                                    <option value='opçoes'>opções do banco</option>
-                                </select>
+                                {
+                                    loadCourses ? (
+                                        <input
+                                            type='text'
+                                            disabled={true}
+                                            value='Carregando...'
+                                        />
+                                    ) : (
+                                        <select value={instituicaoSelected} onChange={handleChangeInstituicao} className='combo-nivel-ensino'>
+                                            {instituicao.map((item, index) => {
+                                                return (
+                                                    <option key={index} value={index}>
+                                                        {item.nomeInstituicao}
+                                                    </option>
+                                                )
+                                            })}
+                                        </select>
+                                    )
+                                }
 
                                 <label>CURSO:</label>
-                                <select value={''} onChange={() => { }} className='combo-nivel-ensino'>
-                                    <option value='opçoes'>opções do banco</option>
-                                    <option value='opçoes'>opções do banco</option>
-                                    <option value='opçoes'>opções do banco</option>
-                                </select>
+                                {
+                                    loadCourses ? (
+                                        <input
+                                            type='text'
+                                            disabled={true}
+                                            value='Carregando...'
+                                        />
+                                    ) : (
+                                        <select value={courseSelected} onChange={handleChangeCourse} className='combo-nivel-ensino'>
+                                            {cursos.map((item, index) => {
+                                                return (
+                                                    <option key={index} value={index}>
+                                                        {item.nomeCurso}
+                                                    </option>
+                                                )
+                                            })}
+                                        </select>
+                                    )
+                                }
 
                                 <label>TURMA:</label>
-                                <select value={''} onChange={() => { }} className='combo-nivel-ensino'>
-                                    <option value='opçoes'>opções do banco</option>
-                                    <option value='opçoes'>opções do banco</option>
-                                    <option value='opçoes'>opções do banco</option>
-                                </select>
+                                {
+                                    loadCourses ? (
+                                        <input
+                                            type='text'
+                                            disabled={true}
+                                            value='Carregando...'
+                                        />
+                                    ) : (
+                                        <select value={turmaSelected} onChange={handleChangeTurma} className='combo-nivel-ensino'>
+                                            {turmas.map((item, index) => {
+                                                return (
+                                                    <option key={index} value={index}>
+                                                        {item.nomeTurma}
+                                                    </option>
+                                                )
+                                            })}
+                                        </select>
+                                    )
+                                }
                             </div>
                         )}
 

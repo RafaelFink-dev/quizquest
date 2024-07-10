@@ -1,12 +1,18 @@
-import './ranking.css';
+
 
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 
+
 import { FiBarChart } from 'react-icons/fi';
 
 
+
+
 export default function Ranking() {
+
+
+ 
     return (
         <div>
 
@@ -21,5 +27,7 @@ export default function Ranking() {
             </div>
 
         </div>
+
+
     )
 }
