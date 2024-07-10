@@ -28,21 +28,10 @@ export default function Home() {
 
         //BUSCANDO QUANTIDADE DE USUARIOS - TALVEZ COLOCAR O ONSNAPSHOT PARA FICAR OLHANDO O BANCO MAS NAO VEJO NECESSIDADE
         async function loadUsers() {
+
             const querySnapshot = await getDocs(listRefUsers)
                 .then((snapshot) => {
 
-                    //let usersRanking = [];
-
-                    snapshot.docs.map((aluno) => {
-                        usersRanking.push({
-                            id: aluno.id,
-                            nomeUsuario: aluno.data().nome,
-                            pontos: aluno.data().pontos
-                        })
-                    })
-
-                    //setUsersRanking(usersRanking);
-                    //console.log(usersRanking)
                     setUsers(snapshot.docs.length);
                     setLoadUsers(false);
 
@@ -79,7 +68,6 @@ export default function Home() {
                 const q = query(listRefUsers, orderBy('pontos', 'desc'), limit(10));
 
                 // Obtém os documentos da query
-                console.log(q)
                 const querySnapshot = await getDocs(q);
 
                 let usersRanking = [];
@@ -95,10 +83,8 @@ export default function Home() {
 
                 // Define o estado com a lista de usuários ordenada
                 setUsersRanking(usersRanking);
-                console.log('Users Ranking:', usersRanking);
 
                 // Define outros estados conforme necessário
-                setUsers(querySnapshot.docs.length);
                 setLoadUsers(false);
             } catch (e) {
                 console.log(e);
@@ -108,9 +94,9 @@ export default function Home() {
         }
 
 
-        loadUsersRanking();
         loadUsers();
         loadQuizes();
+        loadUsersRanking();
 
 
     }, [])

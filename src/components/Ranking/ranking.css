@@ -90,3 +90,27 @@
         max-width: 100%;
     }
   }
+
+  @media screen and (max-width: 451px) {
+
+    .title-ranking-div {
+        display: none;
+    }
+
+    .list-ranking-div{
+        height: auto;
+        flex-direction: column;
+    }
+
+    .list-ranking-div-posicao{
+        
+    }
+
+    .list-ranking-div-nome{
+        
+    }
+
+    .list-ranking-div-pontos{
+        
+    }
+  }

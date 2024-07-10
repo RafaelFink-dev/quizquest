@@ -139,15 +139,23 @@
     margin-top: 3px;
   }
 
-
-
-  @media screen and (max-width: 530px) {
+  @media screen and (max-width: 1179px) {
 
     .home-container {
       flex-direction: column;
     }
 
-    .home-div-left{
+  }
+
+
+
+  @media screen and (max-width: 700px) {
+
+    .home-container {
+      flex-direction: column;
+    }
+
+    .home-div-left {
       border-radius: 6px;
       height: 100%;
       /* Para garantir que os filhos ocupem toda a altura do contêiner */
@@ -181,6 +189,68 @@
 
     .header-infos h1 {
       font-size: 14px;
+    }
+
+  }
+
+  @media screen and (max-width: 530px) {
+
+    .home-container {
+      flex-direction: column;
+    }
+
+    .home-div-left {
+      border-radius: 6px;
+      height: 100%;
+      /* Para garantir que os filhos ocupem toda a altura do contêiner */
+      box-sizing: border-box;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      overflow: scroll;
+    }
+
+    .ranking-title h1 {
+      font-size: 15px;
+      margin-left: 10px;
+    }
+
+    .indicators-title h1 {
+      font-size: 13px;
+      margin-left: 10px;
+    }
+
+    .home-div-right {
+      margin-top: 20px;
+    }
+
+    .home-content {
+      margin-left: 0px;
+    }
+
+    .header-indicators {
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .header-infos h1 {
+      font-size: 14px;
+    }
+
+  }
+
+  @media screen and (max-width: 1245px) {
+
+
+    .header-indicators {
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .header-infos h1 {
+      font-size: 14px;
+    }
+
+    .indicators-infos div a{
+      font-size: 12px;
     }
 
   }
