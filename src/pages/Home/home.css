@@ -229,10 +229,13 @@
     .header-indicators {
       font-size: 10px;
       text-align: center;
+      height: auto;
     }
 
-    .header-infos h1 {
-      font-size: 14px;
+
+
+    .header-infos h1{
+      
     }
 
   }
