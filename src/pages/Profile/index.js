@@ -9,7 +9,7 @@ import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../contexts/auth';
 import { toast } from 'react-toastify';
 
-import { doc, updateDoc, getDocs, collection, where, query } from 'firebase/firestore';
+import { doc, updateDoc, getDocs, collection, where, query,  limit } from 'firebase/firestore';
 import { db, storage } from '../../services/firebaseConnection';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 

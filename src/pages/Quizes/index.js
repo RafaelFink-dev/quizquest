@@ -8,7 +8,7 @@ import { FiHelpCircle } from 'react-icons/fi';
 import { useEffect, useState } from 'react';
 
 import { db } from '../../services/firebaseConnection';
-import { collection, getDocs, where, query } from 'firebase/firestore';
+import { collection, getDocs, where, query,  limit, and } from 'firebase/firestore';
 
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -16,7 +16,6 @@ import { toast } from 'react-toastify';
 
 export default function Quizes() {
 
-    const listRef = collection(db, 'quizzes');
     const listRefThemes = collection(db, 'tematicas');
 
     const [quizzes, setQuizzes] = useState([]);
@@ -28,12 +27,16 @@ export default function Quizes() {
 
     const [difficultySelected, setDifficultySelected] = useState('Todos');
 
+    const listRef = collection(db, 'quizzes');
+
 
     useEffect(() => {
 
         async function loadQuizes() {
 
-            const querySnapshot = await getDocs(collection(db, "quizzes"));
+            const q = query(listRef);
+
+            const querySnapshot = await getDocs(q);
             const quizzesList = querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
@@ -85,7 +88,7 @@ export default function Quizes() {
     async function loadQuizesFiltrados() {
 
         if (difficultySelected !== 'Todos') {
-            const q = query(listRef, where('dificuldade', '==', difficultySelected));
+            const q = query(listRef, and(where('dificuldade', '==', difficultySelected), where('tematica', '==', tematicas[tematicaSelected].nomeTematica)));
 
             const querySnapshot = await getDocs(q);
             const quizzesList = querySnapshot.docs.map(doc => ({
@@ -93,7 +96,14 @@ export default function Quizes() {
                 ...doc.data()
             }));
 
+            if (querySnapshot.docs.length === 0){
+                toast.warn('Nenhum quiz encontrado com o filtro informado!')
+                return;
+            }
+
             setQuizzes(quizzesList);
+            //alert(tematicas[tematicaSelected].nomeTematica)
+
 
             return;
         }
@@ -106,6 +116,9 @@ export default function Quizes() {
             ...doc.data()
         }));
         setQuizzes(quizzesList);
+
+
+
         console.log(quizzes)
 
     }
