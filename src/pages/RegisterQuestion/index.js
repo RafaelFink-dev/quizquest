@@ -99,11 +99,11 @@ export default function RegisterQuestion() {
 
 
         await addDoc(collection(db, 'perguntas'), {
-            pergunta: question.toUpperCase(),
+            pergunta: question,
             respostas: answers,
             resposta_correta: correctAnswer,
-            gabarito: gabarito.toUpperCase(),
-            dificuldade: difficultySelected.toUpperCase(),
+            gabarito: gabarito,
+            dificuldade: difficultySelected,
             tematica: tematicas[tematicaSelected]
         })
             .then(() => {
