@@ -8,6 +8,8 @@ import { FiHelpCircle } from 'react-icons/fi';
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/auth';
 
+import { toast } from 'react-toastify';
+
 
 import { db } from '../../services/firebaseConnection';
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
@@ -120,6 +122,39 @@ export default function QuizInProgress({ conteudo }) {
     setCurrentQuestionIndex(prevIndex => prevIndex + 1);
     setTimeLeft(10); // Reiniciar o tempo para a próxima pergunta
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = 'Não é possivel recarregar a pagina durante o quiz.';
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'F5' || (event.ctrlKey && (event.key === 'r' || event.key === 'R'))) {
+        event.preventDefault();
+        toast.warn('Não é possivel recarregar a pagina durante o quiz.');
+      }
+    };
+
+    const handlePopState = (event) => {
+      event.preventDefault();
+      toast.warn('Não é possivel navegar para trás durante o quiz.');
+      window.history.pushState(null, null, window.location.pathname);
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('popstate', handlePopState);
+
+    // Adiciona um estado ao histórico para que possamos interceptar a navegação
+    window.history.pushState(null, null, window.location.pathname);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
 
   if (currentQuestionIndex >= questions.length) {
     return (

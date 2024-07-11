@@ -100,11 +100,11 @@ export default function RegisterQuestion() {
 
         await addDoc(collection(db, 'perguntas'), {
             pergunta: question.toUpperCase(),
-            respostas: answers.toUpperCase(),
+            respostas: answers,
             resposta_correta: correctAnswer,
             gabarito: gabarito.toUpperCase(),
             dificuldade: difficultySelected.toUpperCase(),
-            tematica: tematicas[tematicaSelected].toUpperCase()
+            tematica: tematicas[tematicaSelected]
         })
             .then(() => {
                 toast.success('Questão adicionada com sucesso!');
@@ -213,102 +213,6 @@ export default function RegisterQuestion() {
 
                         </div>
 
-                        {/*MODELO ANTIGO 
-
-                        <div className='container-alternativas'>
-
-                            <div className='alternativa'>
-
-                                <label>ALTERNATIVA 1:</label>
-                                <div className='checkbox-container'>
-                                    <input type="radio"
-                                        value={'Alternativa 1'}
-                                        onChange={handleOptionChange}
-                                        checked={questionCorrect === 'Alternativa 1'}
-                                    />
-                                    <label>ALTERNATIVA CORRETA</label>
-                                </div>
-
-                            </div>
-
-                            <textarea placeholder='Digite sua alternativa'></textarea>
-
-                        </div>
-
-                        <div className='container-alternativas'>
-
-                            <div className='alternativa'>
-
-                                <label>ALTERNATIVA 2:</label>
-                                <div className='checkbox-container'>
-                                    <input type="radio"
-                                        value={'Alternativa 2'}
-                                        onChange={handleOptionChange}
-                                        checked={questionCorrect === 'Alternativa 2'}
-                                    />
-                                    <label>ALTERNATIVA CORRETA</label>
-                                </div>
-
-                            </div>
-
-                            <textarea placeholder='Digite sua alternativa'></textarea>
-
-                        </div>
-
-                        <div className='container-alternativas'>
-
-                            <div className='alternativa'>
-
-                                <label>ALTERNATIVA 3:</label>
-                                <div className='checkbox-container'>
-                                    <input type="radio"
-                                        value={'Alternativa 3'}
-                                        onChange={handleOptionChange}
-                                        checked={questionCorrect === 'Alternativa 3'}
-                                    />
-                                    <label>ALTERNATIVA CORRETA</label>
-                                </div>
-
-                            </div>
-
-                            <textarea placeholder='Digite sua alternativa'></textarea>
-
-                        </div>
-
-                        <div className='container-alternativas'>
-
-                            <div className='alternativa'>
-
-                                <label>ALTERNATIVA 4:</label>
-                                <div className='checkbox-container'>
-                                    <input type="radio"
-                                        value={'Alternativa 4'}
-                                        onChange={handleOptionChange}
-                                        checked={questionCorrect === 'Alternativa 4'}
-
-                                    />
-                                    <label>ALTERNATIVA CORRETA</label>
-                                </div>
-
-                            </div>
-
-                            <textarea placeholder='Digite sua alternativa'></textarea>
-
-                        </div>
-
-                        <div className='container-alternativas'>
-
-                            <div className='alternativa'>
-
-                                <label>GABARITO DA QUESTÃO CORRETA:</label>
-
-                            </div>
-
-                            <textarea placeholder='Digite o gabarito'></textarea>
-
-                        </div>
-
-                        */}
 
                         <div className='area-btn-other'>
 

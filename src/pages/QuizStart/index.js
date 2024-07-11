@@ -28,6 +28,7 @@ export default function QuizStart({ conteudo }) {
             const docSnap = await getDoc(docRef);
             setQuiz({
                 id: docSnap.id,
+                totalPerguntas: docSnap.data().perguntas.length,
                 ...docSnap.data()
             });
 
@@ -38,13 +39,17 @@ export default function QuizStart({ conteudo }) {
     }, [])
 
     async function handleAddAcess() {
-
+        
         const docRef = doc(db, 'quizzes', id)
         const docSnap = await getDoc(docRef);
         
         await updateDoc(docRef, {
             acessos:  1 + docSnap.data().acessos 
         })
+    }
+
+    if (!quiz) {
+        return <div>Carregando...</div>;
     }
 
 
@@ -64,9 +69,9 @@ export default function QuizStart({ conteudo }) {
                     <div className='quiz-start'>
                         <div>
                             <label>TEMÁTICA: {quiz.tematica}</label>
-                            <label>TOTAL DE QUESTÕES: 5</label>
+                            <label>TOTAL DE QUESTÕES: {quiz.totalPerguntas}</label>
                             <label>DIFICULDADE: {quiz.dificuldade}</label>
-                            <label>TEMPO PARA RESPONDER O QUIZ: {quiz.tempoResposta}</label>
+                            <label>TEMPO PARA RESPONDER CADA PERGUNTA: {quiz.tempoResposta}s</label>
                         </div>
 
                         <Link to={`/quiz-in-progress/${id}`} className='quiz-st-button' onClick={handleAddAcess}>INICIAR QUIZ</Link>
