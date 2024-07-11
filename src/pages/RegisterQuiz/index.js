@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiEdit } from 'react-icons/fi';
 
 import { db } from '../../services/firebaseConnection';
-import { collection, addDoc, getDocs, where, query } from 'firebase/firestore';
+import { collection, addDoc, getDocs, where, query, and } from 'firebase/firestore';
 
 import { toast } from 'react-toastify';
 
@@ -32,25 +32,14 @@ export default function RegisterQuiz() {
     const listRef = collection(db, 'perguntas');
     const listRefThemes = collection(db, 'tematicas');
 
-    /*useEffect(() => {
-        const fetchQuestions = async () => {
-            const querySnapshot = await getDocs(collection(db, "perguntas"));
-            const questionsList = querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
-            setAvailableQuestions(questionsList);
-        };
-
-        fetchQuestions();
-    }, [difficultySelected]);
-    //VALIDAR TODA VEZ QUE O COMO DA DIFICULDADE MUDAR ELE FILTRAR NOVAMENTE AS QUESTÕES NO GRID*/
-
     useEffect(() => {
 
         async function loadQuestions() {
 
-            const q = query(listRef, where('dificuldade', '==', difficultySelected));
+            const selectedTematica = tematicas[tematicaSelected] || {id: '5NdrTsnbOLNd5YSv53AV', nomeTematica: 'Química Orgânica'};
+            console.log(selectedTematica)
+
+            const q = query(listRef, and(where('dificuldade', '==', difficultySelected), where('tematica', '==', selectedTematica)));
 
             const querySnapshot = await getDocs(q)
             const questionsList = querySnapshot.docs.map(doc => ({
@@ -58,9 +47,20 @@ export default function RegisterQuiz() {
                 ...doc.data()
             }));
             setAvailableQuestions(questionsList);
+
         }
 
         loadQuestions();
+
+
+        return () => {
+
+        } //quando desmontar o componente
+
+    }, [difficultySelected, tematicaSelected])
+
+
+    useEffect(() => {
 
         async function loadThemes() {
             const querySnapshot = await getDocs(listRefThemes)
@@ -93,12 +93,7 @@ export default function RegisterQuiz() {
 
         loadThemes();
 
-
-        return () => {
-
-        } //quando desmontar o componente
-
-    }, [difficultySelected])
+    }, [])
 
     function handleChangeDifficulty(e) {
         setDifficultySelected(e.target.value);
@@ -126,18 +121,18 @@ export default function RegisterQuiz() {
             await addDoc(collection(db, "quizzes"), {
                 nome: quizName.toUpperCase(),
                 perguntas: selectedQuestions,
-                dificuldade: difficultySelected.toUpperCase(),
+                dificuldade: difficultySelected,
                 tempoResposta: time,
-                tematica: tematicas[tematicaSelected].toUpperCase(),
+                tematica: tematicas[tematicaSelected],
                 acessos: 0,
                 quantidadePerguntas: quantidadePerguntas
             });
-            alert('Quiz adicionado com sucesso!');
+            toast.success('Quiz adicionado com sucesso!');
             setQuizName('');
             setSelectedQuestions([]);
         } catch (error) {
             console.error('Erro ao adicionar quiz: ', error);
-            alert('Erro ao adicionar quiz. Por favor, tente novamente.');
+            toast.error('Erro ao adicionar quiz. Por favor, tente novamente.');
         }
     }
 
@@ -252,13 +247,17 @@ export default function RegisterQuiz() {
 
                                     <div key={question.id} className="question-selection">
 
-                                        <div>
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedQuestions.includes(question.id)}
-                                                onChange={() => toggleQuestionSelection(question.id)}
-                                            />
-                                            <label>{question.pergunta}</label>
+                                        <div className='checkbox'>
+                                            <div>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedQuestions.includes(question.id)}
+                                                    onChange={() => toggleQuestionSelection(question.id)}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label>{question.pergunta}</label>
+                                            </div>
                                         </div>
 
                                         <div>
