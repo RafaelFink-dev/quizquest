@@ -80,7 +80,7 @@
   .quiz-container-progress{
     background-color: #e0e0e0;
     border-radius: 6px;
-    width: 600px;
+    max-width: 600px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
@@ -132,4 +132,12 @@
 
   .div-incorretas ul li{
     margin-bottom: 5px;
+  }
+
+  @media screen and (max-width: 374px) {
+
+    .quiz-info h2{
+      font-size: 16px;
+    }
+
   }
