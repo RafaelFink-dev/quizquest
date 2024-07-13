@@ -66,22 +66,30 @@ export default function RegisterClass() {
     async function handleRegisterClass(e) {
         e.preventDefault();
 
-        await addDoc(collection(db, 'turmas'), {
-            created: new Date(),
-            nomeTurma: turma,
-            curso: cursos[courseSelected],
-            turnoTurna: turnoSelecionado
-        })
-            .then(() => {
-                toast.success('Turma registrada!')
-                setTurma('');
-                setCourseSelected(0);
-                setTurnoSelecionado('Manhã')
+        if (turma !== '') {
+            await addDoc(collection(db, 'turmas'), {
+                created: new Date(),
+                nomeTurma: turma,
+                curso: cursos[courseSelected],
+                turnoTurna: turnoSelecionado
             })
-            .catch((e) => {
-                console.log(e)
-                toast.error('Ops! ocorreu um erro ao registrar');
-            })
+                .then(() => {
+                    toast.success('Turma registrada!')
+                    setTurma('');
+                    setCourseSelected(0);
+                    setTurnoSelecionado('Manhã')
+                })
+                .catch((e) => {
+                    console.log(e)
+                    toast.error('Ops! ocorreu um erro ao registrar');
+                })
+
+            return;
+        } else {
+            toast.warn('Preencha um nome para inserir uma turma')
+        }
+
+
 
     }
 

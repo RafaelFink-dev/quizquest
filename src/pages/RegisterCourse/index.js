@@ -30,21 +30,29 @@ export default function RegisterCourse() {
     }
 
     //INSERINDO CURSO
-    async function handleSubmit(e){
+    async function handleSubmit(e) {
         e.preventDefault();
 
-        await addDoc(collection(db, 'courses'), {
-            nomeCurso: curso,
-            areaConhecimento: areaConhecimento
-        })
-        .then(() => {
-            toast.success('Curso adicionado!')
-            setCurso('');
-            setAreaConhecimento(0);
-        })
-        .catch(() => {
-            toast.error('Erro ao adicionar curso!')
-        })
+        if (curso !== '') {
+            await addDoc(collection(db, 'courses'), {
+                nomeCurso: curso,
+                areaConhecimento: areaConhecimento
+            })
+                .then(() => {
+                    toast.success('Curso adicionado!')
+                    setCurso('');
+                    setAreaConhecimento(0);
+                })
+                .catch(() => {
+                    toast.error('Erro ao adicionar curso!')
+                })
+
+            return;
+        } else {
+            toast.warn('Preencha um nome para inserir um curso!')
+        }
+
+
     }
 
     return (

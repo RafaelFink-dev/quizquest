@@ -73,20 +73,29 @@ export default function RegisterThemes() {
     async function handleRegisterClass(e) {
         e.preventDefault();
 
-        await addDoc(collection(db, 'tematicas'), {
-            created: new Date(),
-            nomeTematica: tematica,
-            curso: cursos[courseSelected]
-        })
-            .then(() => {
-                toast.success('Temática registrada!')
-                setTematica('');
-                setCourseSelected(0);
+        if (tematica !== '') {
+
+            await addDoc(collection(db, 'tematicas'), {
+                created: new Date(),
+                nomeTematica: tematica,
+                curso: cursos[courseSelected]
             })
-            .catch((e) => {
-                console.log(e)
-                toast.error('Ops! ocorreu um erro ao registrar');
-            })
+                .then(() => {
+                    toast.success('Temática registrada!')
+                    setTematica('');
+                    setCourseSelected(0);
+                })
+                .catch((e) => {
+                    console.log(e)
+                    toast.error('Ops! ocorreu um erro ao registrar');
+                })
+
+            return;
+        } else {
+            toast.warn('Preencha um nome para inserir um curso!')
+        }
+
+
 
     }
 
