@@ -104,7 +104,7 @@ function AuthProvider({ children }) {
     }
 
     //Cadastrar usuário aluno/instituicao
-    async function signUp(email, password, name, instituicao, endereco, nivelDeEnsino) {
+    async function signUp(email, password, name, instituicao, endereco, nivelDeEnsino, cnpj) {
         setLoadingAuth(true);
 
         if (instituicao) {
@@ -126,6 +126,7 @@ function AuthProvider({ children }) {
                                 await setDoc(doc(db, 'users', uid), {
                                     nome: name,
                                     email: email,
+                                    cnpj: cnpj,
                                     instituicao: instituicao,
                                     endereco: endereco,
                                     nivelDeEnsino: nivelDeEnsino,
@@ -252,6 +253,8 @@ function AuthProvider({ children }) {
                     uid: uid,
                     nome: docSnap.data().nome,
                     email: docSnap.data().email,
+                    cnpj: docSnap.data().cnpj,
+                    endereco: docSnap.data().endereco,
                     instituicao: docSnap.data().instituicao,
                     professor: docSnap.data().professor,
                     avatarUrl: docSnap.data().avatarUrl,

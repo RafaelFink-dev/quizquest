@@ -108,7 +108,9 @@ export default function Quizes() {
             return;
         }
 
-        const q = query(listRef);
+        //const q = query(listRef);
+        const q = query(listRef, where('tematica', '==', tematicas[tematicaSelected].nomeTematica));
+
 
         const querySnapshot = await getDocs(q);
         const quizzesList = querySnapshot.docs.map(doc => ({

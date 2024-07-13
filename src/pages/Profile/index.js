@@ -21,6 +21,8 @@ export default function Profile() {
     const [imageAvatar, setImageAvatar] = useState(null);
     const [nome, setNome] = useState(user && user.nome);
     const [email, setEmail] = useState(user && user.email);
+    const [cnpj, setCNPJ] = useState(user && user.cnpj);
+    const [endereco, setEndereco] = useState(user && user.endereco);
 
 
     //REFERENCIA PARA COLEÇÃO DE CURSOS
@@ -265,10 +267,24 @@ export default function Profile() {
                         {user.instituicao === true ? (
                             <div className='form-profile-boolean'>
                                 <label>CNPJ:</label>
-                                <input type='number' placeholder='00.000.000/0000-00' />
+                                <input
+                                    type='text'
+                                    placeholder='00.000.000/0000-00'
+                                    value={cnpj}
+                                    maxLength={18}
+                                    onChange={(e) => {
+                                        let formattedCNPJ = e.target.value.replace(/[^\d]/g, ''); // Remove todos os caracteres não numéricos
+                                        if (formattedCNPJ.length > 14) {
+                                            formattedCNPJ = formattedCNPJ.substring(0, 14); // Limita a 14 caracteres
+                                        }
+                                        // Formata o CNPJ com pontos e traços
+                                        formattedCNPJ = formattedCNPJ.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+                                        setCNPJ(formattedCNPJ);
+                                    }}
+                                />
 
                                 <label>ENDEREÇO:</label>
-                                <input type='text' placeholder='Rua São João' />
+                                <input type='text' value={endereco} onChange={(e) => setEndereco(e.target.value)} />
                             </div>
                         ) : (
                             <div className='form-profile-boolean'>

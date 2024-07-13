@@ -32,7 +32,7 @@ export default function SignUp() {
 
         if (instituicao) {
             if (usuario !== '' && email !== '' && password !== '' && endereco !== '' && nivelDeEnsino !== '') {
-                await signUp(email, password, usuario, instituicao, endereco, nivelDeEnsino)
+                await signUp(email, password, usuario, instituicao, endereco, nivelDeEnsino, cnpj)
             } else {
                 toast.warn('Preencha todos os campos!')
             }
