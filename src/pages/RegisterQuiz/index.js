@@ -38,6 +38,7 @@ export default function RegisterQuiz() {
 
             const selectedTematica = tematicas[tematicaSelected] || {id: '5NdrTsnbOLNd5YSv53AV', nomeTematica: 'Química Orgânica'};
             console.log(selectedTematica)
+            //setTematicaSelected(tematicas[0])
 
             const q = query(listRef, and(where('dificuldade', '==', difficultySelected), where('tematica', '==', selectedTematica)));
 

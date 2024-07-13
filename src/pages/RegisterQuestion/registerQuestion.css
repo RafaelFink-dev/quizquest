@@ -35,6 +35,10 @@
     resize: none;
 }
 
+.form-profile .textarea-question{
+    height: 90px; /* Define o tamanho maior apenas para o primeiro textarea */
+}
+
 .area-btn-other {
     max-width: 100%;
     display: flex;
@@ -64,6 +68,7 @@
 .correta label {
     margin-right: 8px;
 }
+
 
 
 @media screen and (max-width: 536px) {

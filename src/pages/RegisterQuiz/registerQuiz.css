@@ -96,19 +96,18 @@
     width: 100%;
     padding: 10px;
     margin-top: -10px;
-    height: 550px;
+    height: 500px;
     overflow-y: scroll;
 }
 
 .question-selection{
     background-color: #FFF;
-    height: 60px;
     border-radius: 6px;
     width: 100%;
     margin-bottom: 20px;
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 20px;
     justify-content: space-between;    
 }
 

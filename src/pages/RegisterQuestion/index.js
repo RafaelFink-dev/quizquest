@@ -171,7 +171,7 @@ export default function RegisterQuestion() {
 
                     <form className='form-profile' onSubmit={handleRegisterQuestion}>
                         <label>DIGITE A PERGUNTA:</label>
-                        <textarea placeholder='Digite sua pergunta' value={question} onChange={(e) => setQuestion(e.target.value)}></textarea>
+                        <textarea placeholder='Digite sua pergunta' value={question} onChange={(e) => setQuestion(e.target.value)} className='textarea-question'></textarea>
 
                         <div className='container-alternativas'>
                             {answers.map((answer, index) => (
