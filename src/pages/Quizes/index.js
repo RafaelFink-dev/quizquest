@@ -104,13 +104,11 @@ export default function Quizes() {
             }
 
             setQuizzes(quizzesList);
-            //alert(tematicas[tematicaSelected].nomeTematica)
 
 
             return;
         }
 
-        //const q = query(listRef);
         const q = query(listRef, where('tematica', '==', tematicas[tematicaSelected].nomeTematica));
 
 
@@ -229,45 +227,6 @@ export default function Quizes() {
                             ))}
                         </div>
                     )}
-
-                    {/*<div className="quiz-list">
-                        {quizzes.map(quiz => (
-
-                            <div className='quiz-container'>
-
-                                <div className='quiz-title'>
-                                    <h1>{quiz.nome}</h1>
-                                </div>
-
-
-                                <div className='quiz-level'
-                                    style={{
-                                        backgroundColor:
-                                            quiz.dificuldade === 'Fácil' ? 'green' :
-                                                quiz.dificuldade === 'Média' ? 'yellow' :
-                                                    quiz.dificuldade === 'Difícil' ? 'red' : 'defaultColor',
-                                        color:
-                                            quiz.dificuldade === 'Fácil' ? '#FFF' :
-                                                quiz.dificuldade === 'Média' ? '#121212' :
-                                                    quiz.dificuldade === 'Difícil' ? '#FFF' : 'defaultColor'
-                                    }}
-                                >
-                                    <h1>{quiz.dificuldade.toUpperCase()}</h1>
-                                </div>
-
-
-                                <div className='quiz-acessos'>
-                                    <h1>TOTAL DE ACESSOS: {quiz.acessos}</h1>
-                                </div>
-
-
-                                <Link to={`/quiz-start/${quiz.id}`} className='quiz-button'>ACESSAR QUIZ</Link>
-
-                            </div>
-
-
-                        ))}
-                    </div>*/}
 
                 </div>
 

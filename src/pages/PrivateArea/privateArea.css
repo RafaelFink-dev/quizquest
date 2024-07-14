@@ -9,7 +9,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px; /* Espaço entre os links */
+  gap: 10px; 
 }
 
 .container-options a {
@@ -21,7 +21,7 @@
   color: #FFF;
   background-color: #FF8820;
   border-radius: 4px;
-  margin-bottom: 10px; /* Adiciona margem inferior para evitar sobreposição */
+  margin-bottom: 10px; 
   transition: all 0.5s;
   text-align: center;
 }

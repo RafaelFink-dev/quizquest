@@ -64,15 +64,12 @@ export default function Home() {
 
         async function loadUsersRanking() {
             try {
-                // Cria a query para ordenar os documentos pela coluna 'pontos' em ordem decrescente
                 const q = query(listRefUsers, orderBy('pontos', 'desc'), limit(10));
 
-                // Obtém os documentos da query
                 const querySnapshot = await getDocs(q);
 
                 let usersRanking = [];
 
-                // Mapeia os documentos retornados pela query para o array usersRanking
                 querySnapshot.docs.forEach((aluno) => {
                     usersRanking.push({
                         id: aluno.id,
@@ -81,10 +78,8 @@ export default function Home() {
                     });
                 });
 
-                // Define o estado com a lista de usuários ordenada
                 setUsersRanking(usersRanking);
 
-                // Define outros estados conforme necessário
                 setLoadUsers(false);
             } catch (e) {
                 console.log(e);

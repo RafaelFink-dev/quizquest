@@ -55,7 +55,7 @@ export default function QuizInProgress({ conteudo }) {
     await updateDoc(docRef, {
       pontos: pontos
     }).then(() => {
-      let data = { //pegando todas infos e atualizando somente o que precisa
+      let data = { 
         ...user,
         pontos: pontos,
       };
@@ -88,7 +88,7 @@ export default function QuizInProgress({ conteudo }) {
     } else {
       setIncorrectAnswers(prevIncorrect => {
         const updatedIncorrect = [...prevIncorrect];
-        updatedIncorrect[currentQuestionIndex] = index; // Armazena o índice da resposta incorreta selecionada
+        updatedIncorrect[currentQuestionIndex] = index; 
         return updatedIncorrect;
       });
     }
@@ -96,13 +96,13 @@ export default function QuizInProgress({ conteudo }) {
     setTimeout(() => {
       setShowAnswer(false);
       handleNextQuestion();
-    }, 1000); // Delay para mostrar a resposta correta antes de passar para a próxima pergunta
+    }, 1000); 
   };
 
   const handleNextQuestion = () => {
     setSelectedAnswer(null);
     setCurrentQuestionIndex(prevIndex => prevIndex + 1);
-    setTimeLeft(10); // Reiniciar o tempo para a próxima pergunta
+    setTimeLeft(10); 
   };
 
   useEffect(() => {
@@ -128,7 +128,6 @@ export default function QuizInProgress({ conteudo }) {
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('popstate', handlePopState);
 
-    // Adiciona um estado ao histórico para que possamos interceptar a navegação
     window.history.pushState(null, null, window.location.pathname);
 
     return () => {

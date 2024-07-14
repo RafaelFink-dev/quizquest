@@ -90,7 +90,6 @@ export default function RegisterQuestion() {
 
     async function handleRegisterQuestion(e) {
         e.preventDefault();
-        //console.log("resposta correta " + correctAnswer)
 
         if (!question || answers.some(answer => answer === '') || correctAnswer === null || gabarito === '') {
             toast.warn('Por favor, preencha todos os campos e selecione a resposta correta.');
