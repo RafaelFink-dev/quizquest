@@ -197,7 +197,10 @@ function AuthProvider({ children }) {
                                 email: email,
                                 aluno: true,
                                 avatarUrl: null,
-                                pontos: 0
+                                pontos: 0,
+                                instituicaoEnsino: '',
+                                curso: '',
+                                turma: ''
                             })
                                 .then(() => {
 
@@ -258,7 +261,12 @@ function AuthProvider({ children }) {
                     instituicao: docSnap.data().instituicao,
                     professor: docSnap.data().professor,
                     avatarUrl: docSnap.data().avatarUrl,
-                    pontos: docSnap.data().pontos
+                    pontos: docSnap.data().pontos,
+                    instituicaoEnsino: docSnap.data().instituicaoEnsino ? docSnap.data().instituicaoEnsino.nomeInstituicao : null,
+                    curso: docSnap.data().curso ? docSnap.data().curso.nomeCurso : null,
+                    turma: docSnap.data().turma ? docSnap.data().turma.nomeTurma : null
+    
+
                 };
 
                 setUser(data);

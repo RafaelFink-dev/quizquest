@@ -9,7 +9,7 @@ import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../contexts/auth';
 import { toast } from 'react-toastify';
 
-import { doc, updateDoc, getDocs, collection, where, query,  limit } from 'firebase/firestore';
+import { doc, updateDoc, getDocs, collection, where, query, limit } from 'firebase/firestore';
 import { db, storage } from '../../services/firebaseConnection';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -141,6 +141,34 @@ export default function Profile() {
 
     }, [])
 
+    useEffect(() => {
+        if (!user.instituicao && user.instituicaoEnsino && instituicao.length > 0) {
+            const selectedIndex = instituicao.findIndex(item => item.nomeInstituicao === user.instituicaoEnsino);
+            if (selectedIndex !== -1) {
+                setInstituicaoSelected(selectedIndex);
+            }
+        }
+    }, [user, instituicao]);
+
+    useEffect(() => {
+        if (!user.instituicao && user.curso && cursos.length > 0) {
+            const selectedIndex = cursos.findIndex(item => item.nomeCurso === user.curso);
+            if (selectedIndex !== -1) {
+                setCourseSelected(selectedIndex);
+            }
+        }
+    }, [user, cursos]);
+
+    useEffect(() => {
+        if (!user.instituicao && user.turma && turmas.length > 0) {
+            const selectedIndex = turmas.findIndex(item => item.nomeTurma === user.turma);
+            if (selectedIndex !== -1) {
+                setTurmaSelected(selectedIndex);
+            }
+        }
+    }, [user, turmas]);
+
+
     function handleChangeCourse(e) {
         setCourseSelected(e.target.value);
     }
@@ -207,27 +235,70 @@ export default function Profile() {
     async function handleSubmit(e) {
         e.preventDefault();
 
-        if (imageAvatar === null && nome !== user.nome) {
+        if (!user.instituicao) {
+
+
+            if (imageAvatar === null && nome !== user.nome || instituicao[instituicaoSelected].nomeInstituicao != user.instituicaoEnsino || cursos[courseSelected].nomeCurso != user.curso || turmas[turmaSelected.nomeTurma != user.turma]) {
+
+                console.log('É DIFERENTE')
+                //Atualizar somente o nome
+                const docRef = doc(db, 'users', user.uid)
+                await updateDoc(docRef, {
+                    nome: nome,
+                    instituicaoEnsino: instituicao[instituicaoSelected],
+                    curso: cursos[courseSelected],
+                    turma: turmas[turmaSelected]
+                })
+                    .then(() => {
+                        let data = { //pegando todas infos e atualizando somente o que precisa
+                            ...user,
+                            nome: nome,
+                            instituicaoEnsino: instituicao[instituicaoSelected].nomeInstituicao,
+                            curso: cursos[courseSelected].nomeCurso,
+                            turma: turmas[turmaSelected].nome
+                        }
+
+                        setUser(data);
+                        storageUser(data);
+                        toast.success('Informações alteradas com sucesso!')
+                    })
+            } else if (nome !== '' || imageAvatar !== null) {
+                //Atualizar nome e imagem
+                handleUpload();
+            }
+        } 
+
+        if (imageAvatar === null && nome !== user.nome || cnpj != user.cnpj || endereco != user.endereco) {
+
+            console.log('É DIFERENTE')
             //Atualizar somente o nome
             const docRef = doc(db, 'users', user.uid)
             await updateDoc(docRef, {
-                nome: nome
+                nome: nome,
+                cnpj: cnpj,
+                endereco: endereco
             })
                 .then(() => {
                     let data = { //pegando todas infos e atualizando somente o que precisa
                         ...user,
-                        nome: nome
+                        nome: nome,
+                        cnpj: cnpj,
+                        endereco: endereco
                     }
 
                     setUser(data);
                     storageUser(data);
                     toast.success('Informações alteradas com sucesso!')
                 })
-        } else if (nome !== '' && imageAvatar !== null) {
+        } else if (nome !== '' || imageAvatar !== null) {
             //Atualizar nome e imagem
             handleUpload();
         }
+
+
     }
+
+
 
     return (
         <div>
