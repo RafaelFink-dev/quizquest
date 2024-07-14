@@ -294,7 +294,7 @@ function AuthProvider({ children }) {
 
         await api.get(`&email=${email}`, {
             params: {
-                key: 'a3YTEaF0ibJ0ORV8XUiLMAVdC75cW7SAJMVD'
+                key: 'PrSTju7GKesbspuFIaY8tMbPkauVW2GrGBiX'
             }
         })
             .then((response) => {
