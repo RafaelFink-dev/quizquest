@@ -8,7 +8,7 @@ import { FiHelpCircle } from 'react-icons/fi';
 import { useEffect, useState } from 'react';
 
 import { db } from '../../services/firebaseConnection';
-import { collection, getDocs, where, query,  limit, and } from 'firebase/firestore';
+import { collection, getDocs, where, query,  limit, and, startAfter } from 'firebase/firestore';
 
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -23,6 +23,8 @@ export default function Quizes() {
     const [tematicas, setTematicas] = useState([]);
     const [loadTematicas, setLoadTematicas] = useState(true);
     const [tematicaSelected, setTematicaSelected] = useState(0);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [lastDocs, setLastDocs] = useState();
     const [reset, setReset] = useState(false);
 
     const [difficultySelected, setDifficultySelected] = useState('Todos');
@@ -118,10 +120,6 @@ export default function Quizes() {
             ...doc.data()
         }));
         setQuizzes(quizzesList);
-
-
-
-        console.log(quizzes)
 
     }
 

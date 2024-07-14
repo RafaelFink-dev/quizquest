@@ -13,7 +13,6 @@ import RegisterClass from '../pages/RegisterClass';
 import RegisterCourse from '../pages/RegisterCourse';
 import RegisterQuestion from '../pages/RegisterQuestion';
 import RegisterQuiz from '../pages/RegisterQuiz';
-import ViewIndicators from '../pages/ViewIndicators';
 import Quizes from '../pages/Quizes';
 import Ranking from '../pages/Ranking';
 import QuizStart from '../pages/QuizStart';
