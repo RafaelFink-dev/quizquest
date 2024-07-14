@@ -1,0 +1,13 @@
+.container-ranking-page{
+    border-radius: 6px;
+    height: 100%;
+    /* Para garantir que os filhos ocupem toda a altura do contêiner */
+    box-sizing: border-box;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow-y: scroll;
+}
+
+.title-ranking{
+    padding: 20px;
+    font-style: italic;
+}

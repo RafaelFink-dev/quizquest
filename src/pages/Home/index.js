@@ -26,7 +26,7 @@ export default function Home() {
 
     useEffect(() => {
 
-        //BUSCANDO QUANTIDADE DE USUARIOS - TALVEZ COLOCAR O ONSNAPSHOT PARA FICAR OLHANDO O BANCO MAS NAO VEJO NECESSIDADE
+        //BUSCANDO QUANTIDADE DE USUARIOS
         async function loadUsers() {
 
             const querySnapshot = await getDocs(listRefUsers)

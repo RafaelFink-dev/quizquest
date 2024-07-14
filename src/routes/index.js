@@ -38,7 +38,6 @@ function RoutesApp() {
             <Route path="/registerCourse" element={ <Private> <RegisterCourse /> </Private> } />
             <Route path="/registerQuestion" element={ <Private> <RegisterQuestion /> </Private> } />
             <Route path="/registerQuiz" element={ <Private> <RegisterQuiz /> </Private> } />
-            <Route path="/viewIndicators" element={ <Private> <ViewIndicators /> </Private> } />
             <Route path="/quiz" element={ <Private> <Quizes /> </Private> } />
             <Route path="/ranking" element={ <Private> <Ranking /> </Private> } />
             <Route path="/quiz-start/:id" element={ <Private> <QuizStart /> </Private> } />
