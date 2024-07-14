@@ -227,7 +227,7 @@ export default function RegisterQuiz() {
 
                         <div className=''>
                             <label>TEMPO PARA RESPONDER CADA PERGUNTA(segundos):</label>
-                            <input placeholder='00:00:00' value={time} onChange={(e) => setTime(e.target.value)}></input>
+                            <input placeholder='00' value={time} onChange={(e) => setTime(e.target.value)}></input>
                         </div>
 
                     </div>
