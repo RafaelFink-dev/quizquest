@@ -22,9 +22,7 @@ export default function Quizes() {
 
     const [tematicas, setTematicas] = useState([]);
     const [loadTematicas, setLoadTematicas] = useState(true);
-    const [tematicaSelected, setTematicaSelected] = useState(0);
-    const [loadingMore, setLoadingMore] = useState(false);
-    const [lastDocs, setLastDocs] = useState();
+    const [tematicaSelected, setTematicaSelected] = useState(-1);
     const [reset, setReset] = useState(false);
 
     const [difficultySelected, setDifficultySelected] = useState('Todos');
@@ -44,8 +42,6 @@ export default function Quizes() {
                 ...doc.data()
             }));
             setQuizzes(quizzesList);
-            console.log(quizzes)
-
         };
 
         loadQuizes();
@@ -58,7 +54,7 @@ export default function Quizes() {
             const querySnapshot = await getDocs(listRefThemes)
                 .then((snapshot) => {
                     //LISTA PARA ADD TEMÁTICAS
-                    let lista = []
+                    let lista = [{ id: -1, nomeTematica: 'Todas' }];
 
                     snapshot.forEach((theme) => {
                         lista.push({
@@ -89,8 +85,22 @@ export default function Quizes() {
 
     async function loadQuizesFiltrados() {
 
-        if (difficultySelected !== 'Todos') {
-            const q = query(listRef, and(where('dificuldade', '==', difficultySelected), where('tematica', '==', tematicas[tematicaSelected].nomeTematica)));
+        console.log(tematicaSelected)
+
+        if (tematicaSelected === '0') {
+            const q = query(listRef);
+
+            const querySnapshot = await getDocs(q);
+            const quizzesList = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setQuizzes(quizzesList);
+
+            return;
+
+        } else if (difficultySelected !== 'Todos') {
+            const q = query(listRef, and(where('dificuldade', '==', difficultySelected), where('tematica', '==', tematicas[tematicaSelected])));
 
             const querySnapshot = await getDocs(q);
             const quizzesList = querySnapshot.docs.map(doc => ({
@@ -107,18 +117,17 @@ export default function Quizes() {
 
 
             return;
+        } else {
+
+            const q = query(listRef, where('tematica', '==', tematicas[tematicaSelected]));
+
+            const querySnapshot = await getDocs(q);
+            const quizzesList = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setQuizzes(quizzesList);
         }
-
-        const q = query(listRef, where('tematica', '==', tematicas[tematicaSelected].nomeTematica));
-
-
-        const querySnapshot = await getDocs(q);
-        const quizzesList = querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        }));
-        setQuizzes(quizzesList);
-
     }
 
 
@@ -186,7 +195,7 @@ export default function Quizes() {
                     </div>
 
                     {quizzes.length === 0 ? (
-                        <div style={{fontWeight: 'bold', fontStyle: 'italic'}}>Nenhum quiz a ser exibido</div>
+                        <div style={{ fontWeight: 'bold', fontStyle: 'italic' }}>Nenhum quiz a ser exibido</div>
                     ) : (
                         <div className="quiz-list">
                             {quizzes.map(quiz => (
