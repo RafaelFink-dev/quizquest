@@ -223,8 +223,8 @@ export default function Profile() {
                             }
 
                             setUser(data);
-                            storageUser(data);
-                            toast.success('Informações alteradas com sucesso!')
+                            //storageUser(data);
+                            toast.success('Informações alteradas com sucesso! imagem')
 
                         })
                 })
@@ -238,7 +238,7 @@ export default function Profile() {
         if (!user.instituicao) {
 
 
-            if (imageAvatar === null && nome !== user.nome || instituicao[instituicaoSelected].nomeInstituicao != user.instituicaoEnsino || cursos[courseSelected].nomeCurso != user.curso || turmas[turmaSelected.nomeTurma != user.turma]) {
+            if (imageAvatar !== null || nome !== user.nome || instituicao[instituicaoSelected].nomeInstituicao != user.instituicaoEnsino || cursos[courseSelected].nomeCurso != user.curso || turmas[turmaSelected.nomeTurma != user.turma]) {
 
                 //Atualizar somente o nome
                 const docRef = doc(db, 'users', user.uid)
@@ -257,18 +257,18 @@ export default function Profile() {
                             turma: turmas[turmaSelected].nome
                         }
 
+
+
+                        setUser(data);   
+                        storageUser(data); 
                         handleUpload();
-                        setUser(data);
-                        storageUser(data);
-                        toast.success('Informações alteradas com sucesso!')
+                        
+                        toast.success('Informações alteradas com sucesso! 1')
                     })
-            } else if (nome !== '' || imageAvatar !== null) {
-                //Atualizar nome e imagem
-                handleUpload();
-            }
+            } 
 
             return;
-        } 
+        }
 
         if (imageAvatar === null && nome !== user.nome || cnpj != user.cnpj || endereco != user.endereco) {
 
@@ -292,6 +292,8 @@ export default function Profile() {
                     storageUser(data);
                     toast.success('Informações alteradas com sucesso!')
                 })
+
+            return;
         } else if (nome !== '' || imageAvatar !== null) {
             //Atualizar nome e imagem
             handleUpload();

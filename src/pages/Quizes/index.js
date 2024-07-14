@@ -86,7 +86,6 @@ export default function Quizes() {
     async function loadQuizesFiltrados() {
 
         if (tematicaSelected === '0' && difficultySelected === 'Todos') {
-            alert('todos')
             const q = query(listRef);
 
             const querySnapshot = await getDocs(q);
@@ -98,9 +97,7 @@ export default function Quizes() {
 
             return;
 
-        } else if (tematicaSelected !== -1 && difficultySelected !== 'Todos') {
-
-            alert('somente dificuldade')
+        } else if (tematicaSelected === '0' && difficultySelected !== 'Todos') {
 
             //const q = query(listRef, and(where('dificuldade', '==', difficultySelected), where('tematica', '==', tematicas[tematicaSelected])));
             const q = query(listRef, where('dificuldade', '==', difficultySelected));
@@ -112,7 +109,7 @@ export default function Quizes() {
             }));
 
             if (querySnapshot.docs.length === 0) {
-                toast.warn('Nenhum quiz encontrado com o filtro informado! 2')
+                toast.warn('Nenhum quiz encontrado com o filtro informado!')
                 return;
             }
 
@@ -121,8 +118,11 @@ export default function Quizes() {
 
             return;
         }
-        /*else if (difficultySelected !== 'Todos' && tematicaSelected !== -1) {
-            const q = query(listRef, and(where('dificuldade', '==', difficultySelected), where('tematica', '==', tematicas[tematicaSelected])));
+
+        else if (tematicaSelected !== '0' && difficultySelected === 'Todos') {
+
+
+            const q = query(listRef, where('tematica', '==', tematicas[tematicaSelected]));
             //const q = query(listRef, where('dificuldade', '==', difficultySelected));
 
             const querySnapshot = await getDocs(q);
@@ -132,8 +132,7 @@ export default function Quizes() {
             }));
 
             if (querySnapshot.docs.length === 0) {
-                alert(tematicaSelected)
-                toast.warn('Nenhum quiz encontrado com o filtro informado! 3')
+                toast.warn('Nenhum quiz encontrado com o filtro informado!')
                 return;
             }
 
@@ -141,17 +140,30 @@ export default function Quizes() {
 
 
             return;
-        } */else {
+        }
 
-            const q = query(listRef, where('tematica', '==', tematicas[tematicaSelected]));
+        else if (tematicaSelected !== '0' && difficultySelected !== 'Todos') {
+
+            const q = query(listRef, and(where('tematica', '==', tematicas[tematicaSelected]), where('dificuldade', '==', difficultySelected)));
+            //const q = query(listRef, where('dificuldade', '==', difficultySelected));
 
             const querySnapshot = await getDocs(q);
             const quizzesList = querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
             }));
+
+            if (querySnapshot.docs.length === 0) {
+                toast.warn('Nenhum quiz encontrado com o filtro informado!')
+                return;
+            }
+
             setQuizzes(quizzesList);
+
+
+            return;
         }
+        
     }
 
 
