@@ -1,7 +1,7 @@
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 
-import './profile.css'
+import './profile.css';
 
 import { FiUser, FiUpload } from 'react-icons/fi';
 import avatar from '../../assets/avatar2.png';
@@ -9,12 +9,11 @@ import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../contexts/auth';
 import { toast } from 'react-toastify';
 
-import { doc, updateDoc, getDocs, collection, where, query, limit } from 'firebase/firestore';
+import { doc, updateDoc, getDocs, collection, where, query } from 'firebase/firestore';
 import { db, storage } from '../../services/firebaseConnection';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export default function Profile() {
-
     const { user, storageUser, setUser } = useContext(AuthContext);
 
     const [avatarUrl, setAvatarUrl] = useState(user && user.avatarUrl);
@@ -23,7 +22,6 @@ export default function Profile() {
     const [email, setEmail] = useState(user && user.email);
     const [cnpj, setCNPJ] = useState(user && user.cnpj);
     const [endereco, setEndereco] = useState(user && user.endereco);
-
 
     //REFERENCIA PARA COLEÇÃO DE CURSOS
     const listRef = collection(db, 'courses');
@@ -37,109 +35,86 @@ export default function Profile() {
     const [instituicao, setInstituicao] = useState([]);
     const [instituicaoSelected, setInstituicaoSelected] = useState(0);
 
-
     useEffect(() => {
+        async function loadCourses() {
+            try {
+                const snapshot = await getDocs(listRef);
+                let lista = [];
+                snapshot.forEach((course) => {
+                    lista.push({
+                        id: course.id,
+                        nomeCurso: course.data().nomeCurso,
+                    });
+                });
+
+                if (lista.length === 0) {
+                    setCursos([{ id: 1, nomeCurso: 'NENHUM CURSO ENCONTRADO' }]);
+                } else {
+                    setCursos(lista);
+                }
+            } catch (e) {
+                console.log(e);
+                setCursos([{ id: 1, nomeCurso: 'NENHUM CURSO ENCONTRADO' }]);
+            } finally {
+                setLoadCourses(false);
+            }
+        }
+
+        async function loadTurmas() {
+            try {
+                const snapshot = await getDocs(listRefTurmas);
+                let lista = [];
+                snapshot.forEach((turma) => {
+                    lista.push({
+                        id: turma.id,
+                        nomeTurma: turma.data().nomeTurma,
+                    });
+                });
+
+                if (lista.length === 0) {
+                    setTurmas([{ id: 1, nomeTurma: 'NENHUMA TURMA ENCONTRADA' }]);
+                } else {
+                    setTurmas(lista);
+                }
+            } catch (e) {
+                console.log(e);
+                setTurmas([{ id: 1, nomeTurma: 'NENHUMA TURMA ENCONTRADA' }]);
+            } finally {
+                setLoadCourses(false);
+            }
+        }
+
+        async function loadInstituicao() {
+            try {
+                const q = query(listRefInstituicao, where('instituicao', '==', true));
+                const snapshot = await getDocs(q);
+                let lista = [];
+                snapshot.forEach((instituicao) => {
+                    lista.push({
+                        id: instituicao.id,
+                        nomeInstituicao: instituicao.data().nome,
+                    });
+                });
+
+                if (lista.length === 0) {
+                    setInstituicao([{ id: 1, nomeInstituicao: 'NENHUMA INSTITUIÇÃO ENCONTRADA' }]);
+                } else {
+                    setInstituicao(lista);
+                }
+            } catch (e) {
+                console.log(e);
+                setInstituicao([{ id: 1, nomeInstituicao: 'NENHUMA INSTITUIÇÃO ENCONTRADA' }]);
+            } finally {
+                setLoadCourses(false);
+            }
+        }
 
         if (!user.instituicao) {
-
-
-            //CARREGAR CURSOS AO ABRIR A TELA
-            async function loadCourses() {
-                const querySnapshot = await getDocs(listRef)
-                    .then((snapshot) => {
-                        //LISTA PARA ADD CURSOS
-                        let lista = []
-
-                        snapshot.forEach((course) => {
-                            lista.push({
-                                id: course.id,
-                                nomeCurso: course.data().nomeCurso
-                            })
-                        })
-
-                        if (snapshot.docs.size === 0) {
-                            setCursos([{ id: 1, nomeCurso: 'NENHUM CURSO ENCONTRADO' }]);
-                            setLoadCourses(false);
-                            return;
-                        }
-
-                        setCursos(lista);
-                        setLoadCourses(false);
-                    })
-                    .catch((e) => {
-                        console.log(e);
-                        setLoadCourses(false);
-                        setCursos([{ id: 1, nomeCurso: 'NENHUM CURSO ENCONTRADO' }]);
-                    })
-            }
-
-            async function loadTurmas() {
-                const querySnapshot = await getDocs(listRefTurmas)
-                    .then((snapshot) => {
-                        //LISTA PARA ADD CURSOS
-                        let lista = []
-
-                        snapshot.forEach((turma) => {
-                            lista.push({
-                                id: turma.id,
-                                nomeTurma: turma.data().nomeTurma
-                            })
-                        })
-
-                        if (snapshot.docs.size === 0) {
-                            setTurmas([{ id: 1, nomeTurma: 'NENHUMA TURMA ENCONTRADA' }]);
-                            setLoadCourses(false);
-                            return;
-                        }
-
-                        setTurmas(lista);
-                        setLoadCourses(false);
-                    })
-                    .catch((e) => {
-                        console.log(e);
-                        setLoadCourses(false);
-                        setTurmas([{ id: 1, nomeTurma: 'NENHUMA TURMA ENCONTRADA' }]);
-                    })
-            }
-
-            async function loadInstituicao() {
-
-                const q = query(listRefInstituicao, where('instituicao', '==', true));
-
-                const querySnapshot = await getDocs(q)
-                    .then((snapshot) => {
-                        //LISTA PARA ADD CURSOS
-                        let lista = []
-
-                        snapshot.forEach((instituicao) => {
-                            lista.push({
-                                id: instituicao.id,
-                                nomeInstituicao: instituicao.data().nome
-                            })
-                        })
-
-                        if (snapshot.docs.size === 0) {
-                            setInstituicao([{ id: 1, nomeInstituicao: 'NENHUMA INSITUICAO ENCONTRADA' }]);
-                            setLoadCourses(false);
-                            return;
-                        }
-
-                        setInstituicao(lista);
-                        setLoadCourses(false);
-                    })
-                    .catch((e) => {
-                        console.log(e);
-                        setLoadCourses(false);
-                        setInstituicao([{ id: 1, nomeInstituicao: 'NENHUMA INSITUICAO ENCONTRADA' }]);
-                    })
-            }
-
             loadTurmas();
             loadCourses();
             loadInstituicao();
         }
-
-    }, [])
+    }, [user]);
 
     useEffect(() => {
         if (!user.instituicao && user.instituicaoEnsino && instituicao.length > 0) {
@@ -168,20 +143,17 @@ export default function Profile() {
         }
     }, [user, turmas]);
 
-
     function handleChangeCourse(e) {
-        setCourseSelected(e.target.value);
+        setCourseSelected(Number(e.target.value));
     }
 
     function handleChangeTurma(e) {
-        setTurmaSelected(e.target.value);
+        setTurmaSelected(Number(e.target.value));
     }
 
     function handleChangeInstituicao(e) {
-        setInstituicaoSelected(e.target.value);
+        setInstituicaoSelected(Number(e.target.value));
     }
-
-
 
     function handleFile(e) {
         if (e.target.files[0]) {
@@ -191,7 +163,7 @@ export default function Profile() {
                 setImageAvatar(image); //Arquivo da imagem a enviar
                 setAvatarUrl(URL.createObjectURL(image)) //Criando URL para enviar
             } else {
-                toast.warn('Envie uma imagem em PNG ou JPG!')
+                toast.warn('Envie uma imagem em PNG ou JPG!');
                 setAvatarUrl(null);
                 return;
             }
@@ -203,238 +175,157 @@ export default function Profile() {
 
         const uploadRef = ref(storage, `images/${currentUid}/imagePerfil`);
 
-        const uploadTask = uploadBytes(uploadRef, imageAvatar)
-            .then((snapshot) => {
+        const snapshot = await uploadBytes(uploadRef, imageAvatar);
+        const downloadUrl = await getDownloadURL(snapshot.ref);
 
-                getDownloadURL(snapshot.ref).then(async (downloadUrl) => {
-                    let urlImage = downloadUrl;
+        const docRef = doc(db, 'users', user.uid);
+        await updateDoc(docRef, {
+            avatarUrl: downloadUrl,
+            nome: nome,
+        });
 
-                    const docRef = doc(db, 'users', user.uid);
-                    await updateDoc(docRef, {
-                        avatarUrl: urlImage,
-                        nome: nome
-                    })
-                        .then(() => {
+        let data = {
+            ...user,
+            nome: nome,
+            avatarUrl: downloadUrl,
+        };
 
-                            let data = { //pegando todas infos e atualizando somente o que precisa
-                                ...user,
-                                nome: nome,
-                                avatarUrl: urlImage
-                            }
-
-                            setUser(data);
-                            //storageUser(data);
-                            toast.success('Informações alteradas com sucesso! imagem')
-
-                        })
-                })
-
-            })
+        setUser(data);
+        storageUser(data);
+        toast.success('Informações alteradas com sucesso! Imagem');
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
 
+        const instituicaoAtualizada = instituicao[instituicaoSelected]?.nomeInstituicao || user.instituicaoEnsino;
+        const cursoAtualizado = cursos[courseSelected]?.nomeCurso || user.curso;
+        const turmaAtualizada = turmas[turmaSelected]?.nomeTurma || user.turma;
+
+        const docRef = doc(db, 'users', user.uid);
+
         if (!user.instituicao) {
-
-
-            if (imageAvatar !== null || nome !== user.nome || instituicao[instituicaoSelected].nomeInstituicao != user.instituicaoEnsino || cursos[courseSelected].nomeCurso != user.curso || turmas[turmaSelected.nomeTurma != user.turma]) {
-
-                //Atualizar somente o nome
-                const docRef = doc(db, 'users', user.uid)
+            if (imageAvatar !== null || nome !== user.nome || instituicaoAtualizada !== user.instituicaoEnsino || cursoAtualizado !== user.curso || turmaAtualizada !== user.turma) {
                 await updateDoc(docRef, {
                     nome: nome,
-                    instituicaoEnsino: instituicao[instituicaoSelected],
-                    curso: cursos[courseSelected],
-                    turma: turmas[turmaSelected]
-                })
-                    .then(() => {
-                        let data = { //pegando todas infos e atualizando somente o que precisa
-                            ...user,
-                            nome: nome,
-                            instituicaoEnsino: instituicao[instituicaoSelected],
-                            curso: cursos[courseSelected].nomeCurso,
-                            turma: turmas[turmaSelected].nome
-                        }
-
-
-
-                        setUser(data);   
-                        storageUser(data); 
-                        handleUpload();
-                        
-                        toast.success('Informações alteradas com sucesso! 1')
-                    })
-            } 
-
-            return;
-        }
-
-        if (imageAvatar === null && nome !== user.nome || cnpj != user.cnpj || endereco != user.endereco) {
-
-            console.log('É DIFERENTE')
-            //Atualizar somente o nome
-            const docRef = doc(db, 'users', user.uid)
-            await updateDoc(docRef, {
-                nome: nome,
-                cnpj: cnpj,
-                endereco: endereco
-            })
-                .then(() => {
-                    let data = { //pegando todas infos e atualizando somente o que precisa
+                    instituicaoEnsino: instituicaoAtualizada,
+                    curso: cursoAtualizado,
+                    turma: turmaAtualizada,
+                }).then(() => {
+                    let data = {
                         ...user,
                         nome: nome,
-                        cnpj: cnpj,
-                        endereco: endereco
-                    }
+                        instituicaoEnsino: instituicaoAtualizada,
+                        curso: cursoAtualizado,
+                        turma: turmaAtualizada,
+                    };
 
                     setUser(data);
                     storageUser(data);
-                    toast.success('Informações alteradas com sucesso!')
-                })
 
-            return;
-        } else if (nome !== '' || imageAvatar !== null) {
-            //Atualizar nome e imagem
-            handleUpload();
+                    if (imageAvatar !== null) {
+                        handleUpload();
+                    } else {
+                        toast.success('Informações alteradas com sucesso!');
+                    }
+                });
+            }
+        } else {
+            if (imageAvatar === null || nome !== user.nome || cnpj !== user.cnpj || endereco !== user.endereco) {
+                await updateDoc(docRef, {
+                    nome: nome,
+                    cnpj: cnpj,
+                    endereco: endereco,
+                }).then(() => {
+                    let data = {
+                        ...user,
+                        nome: nome,
+                        cnpj: cnpj,
+                        endereco: endereco,
+                    };
+
+                    setUser(data);
+                    storageUser(data);
+                    toast.success('Informações alteradas com sucesso!');
+                });
+            } else if (nome !== '' || imageAvatar !== null) {
+                handleUpload();
+            }
         }
-
-
     }
-
-
 
     return (
         <div>
             <Header />
-
             <div className='content'>
-                <Title name='MEU PERFIL'>
-                    <FiUser size={24} />
+                <Title name="Meu perfil">
+                    <FiUser color="#000" size={25} />
                 </Title>
-
                 <div className='container-profile'>
                     <form className='form-profile' onSubmit={handleSubmit}>
                         <label className='label-avatar'>
-
                             <span>
-                                <FiUpload size={30} />
+                                <FiUpload color="#fff" size={25} />
                             </span>
-
-                            <input type='file' accept='image/*' onChange={handleFile} /> <br />
-
-                            {avatarUrl === null ? (
-                                <img src={avatar} alt='Foto do usuário' width={280} height={280} />
-                            ) : (
-                                <img src={avatarUrl} alt='Foto do usuário' width={210} height={210} />
-                            )}
-
+                            <input type="file" accept="image/*" onChange={handleFile} /><br />
+                            {avatarUrl === null ?
+                                <img src={avatar} width="250" height="250" alt="Foto de perfil do usuário" />
+                                :
+                                <img src={avatarUrl} width="250" height="250" alt="Foto de perfil do usuário" />
+                            }
                         </label>
 
+                        <label>Nome</label>
+                        <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
 
+                        <label>Email</label>
+                        <input type="text" value={email} disabled={true} />
 
-                        <label>NOME:</label>
-                        <input type='text' value={nome} onChange={(e) => setNome(e.target.value)} />
+                        {user.instituicao === true && (
+                            <>
+                                <label>CNPJ</label>
+                                <input type="text" value={cnpj} onChange={(e) => setCNPJ(e.target.value)} />
 
-                        <label>EMAIL:</label>
-                        <input type='text' disabled={true} value={email} />
-
-                        {user.instituicao === true ? (
-                            <div className='form-profile-boolean'>
-                                <label>CNPJ:</label>
-                                <input
-                                    type='text'
-                                    placeholder='00.000.000/0000-00'
-                                    value={cnpj}
-                                    maxLength={18}
-                                    onChange={(e) => {
-                                        let formattedCNPJ = e.target.value.replace(/[^\d]/g, ''); // Remove todos os caracteres não numéricos
-                                        if (formattedCNPJ.length > 14) {
-                                            formattedCNPJ = formattedCNPJ.substring(0, 14); // Limita a 14 caracteres
-                                        }
-                                        // Formata o CNPJ com pontos e traços
-                                        formattedCNPJ = formattedCNPJ.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
-                                        setCNPJ(formattedCNPJ);
-                                    }}
-                                />
-
-                                <label>ENDEREÇO:</label>
-                                <input type='text' value={endereco} onChange={(e) => setEndereco(e.target.value)} />
-                            </div>
-                        ) : (
-                            <div className='form-profile-boolean'>
-                                <label>INSTITUIÇÃO DE ENSINO:</label>
-                                {
-                                    loadCourses ? (
-                                        <input
-                                            type='text'
-                                            disabled={true}
-                                            value='Carregando...'
-                                        />
-                                    ) : (
-                                        <select value={instituicaoSelected} onChange={handleChangeInstituicao} className='combo-nivel-ensino'>
-                                            {instituicao.map((item, index) => {
-                                                return (
-                                                    <option key={index} value={index}>
-                                                        {item.nomeInstituicao}
-                                                    </option>
-                                                )
-                                            })}
-                                        </select>
-                                    )
-                                }
-
-                                <label>CURSO:</label>
-                                {
-                                    loadCourses ? (
-                                        <input
-                                            type='text'
-                                            disabled={true}
-                                            value='Carregando...'
-                                        />
-                                    ) : (
-                                        <select value={courseSelected} onChange={handleChangeCourse} className='combo-nivel-ensino'>
-                                            {cursos.map((item, index) => {
-                                                return (
-                                                    <option key={index} value={index}>
-                                                        {item.nomeCurso}
-                                                    </option>
-                                                )
-                                            })}
-                                        </select>
-                                    )
-                                }
-
-                                <label>TURMA:</label>
-                                {
-                                    loadCourses ? (
-                                        <input
-                                            type='text'
-                                            disabled={true}
-                                            value='Carregando...'
-                                        />
-                                    ) : (
-                                        <select value={turmaSelected} onChange={handleChangeTurma} className='combo-nivel-ensino'>
-                                            {turmas.map((item, index) => {
-                                                return (
-                                                    <option key={index} value={index}>
-                                                        {item.nomeTurma}
-                                                    </option>
-                                                )
-                                            })}
-                                        </select>
-                                    )
-                                }
-                            </div>
+                                <label>Endereço</label>
+                                <input type="text" value={endereco} onChange={(e) => setEndereco(e.target.value)} />
+                            </>
                         )}
 
+                        {!user.instituicao && (
+                            <>
+                                <label>Instituição de ensino</label>
+                                <select value={instituicaoSelected} onChange={handleChangeInstituicao}>
+                                    {instituicao.map((item, index) => (
+                                        <option key={index} value={index}>
+                                            {item.nomeInstituicao}
+                                        </option>
+                                    ))}
+                                </select>
 
-                        <button type='submit' className='btn-save'>SALVAR ALTERAÇÕES</button>
+                                <label>Curso</label>
+                                <select value={courseSelected} onChange={handleChangeCourse}>
+                                    {cursos.map((item, index) => (
+                                        <option key={index} value={index}>
+                                            {item.nomeCurso}
+                                        </option>
+                                    ))}
+                                </select>
 
+                                <label>Turma</label>
+                                <select value={turmaSelected} onChange={handleChangeTurma}>
+                                    {turmas.map((item, index) => (
+                                        <option key={index} value={index}>
+                                            {item.nomeTurma}
+                                        </option>
+                                    ))}
+                                </select>
+                            </>
+                        )}
+
+                        <button type="submit" className='btn-save'>SALVAR</button>
                     </form>
                 </div>
             </div>
-
         </div>
     )
 }
