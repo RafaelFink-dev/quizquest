@@ -66,9 +66,9 @@ export default function QuizStart({ conteudo }) {
 
                 <div className='container-profile'>
 
-                    <div className='quiz-start'>
+                  <div className='quiz-start'>
                         <div>
-                            <label>TEMÁTICA: {quiz.tematica}</label>
+                            <label>QUIZ: {quiz.nome}</label>
                             <label>TOTAL DE QUESTÕES: {quiz.totalPerguntas}</label>
                             <label>DIFICULDADE: {quiz.dificuldade}</label>
                             <label>TEMPO PARA RESPONDER CADA PERGUNTA: {quiz.tempoResposta}s</label>
