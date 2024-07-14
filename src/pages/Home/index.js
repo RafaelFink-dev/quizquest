@@ -116,14 +116,14 @@ export default function Home() {
                     <div className='home-div-left'>
                         <div className='ranking-title'>
                             <FiBarChart size={24} />
-                            <h1>CONFIRA O RANKING DOS MELHORES COLOCADOS:</h1>
+                            <h1>CONFIRA O RANKING DOS DEZ MELHORES COLOCADOS:</h1>
                         </div>
                         <div className='ranking'>
                             <div className='loading-ranking'>
                                 {loadUsers ? (
                                     <span style={{ fontSize: 30, marginTop: 30, fontWeight: 'bold' }}>CARREGANDO RANKING...</span>
                                 ) : (
-                                    <Ranking listRanking={Array.isArray(usersRanking) ? usersRanking : []} />                                  
+                                    <Ranking listRanking={Array.isArray(usersRanking) ? usersRanking : []} />
                                 )}
                             </div>
                         </div>
@@ -148,7 +148,6 @@ export default function Home() {
                                         <h1>{users}</h1>
                                     )
                                 }
-
 
                             </div>
 
@@ -176,11 +175,11 @@ export default function Home() {
                             </div>
 
                             <div className='indicators-infos'>
-                                <div>
-                                    <Link to='/quiz'>
-                                        CLIQUE AQUI E CONFIRA
-                                    </Link>
-                                </div>
+
+                                <Link to='/quiz'>
+                                    CLIQUE AQUI E CONFIRA
+                                </Link>
+
                             </div>
 
                         </div>
