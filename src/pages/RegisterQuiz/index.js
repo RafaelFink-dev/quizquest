@@ -21,7 +21,7 @@ export default function RegisterQuiz() {
     const [selectedQuestions, setSelectedQuestions] = useState([]);
     const [difficultySelected, setDifficultySelected] = useState('Fácil');
     const [quantidadePerguntas, setQuantidadePerguntas] = useState(3);
-    const [time, setTime] = useState('01:00')
+    const [time, setTime] = useState('60')
 
     const [tematicas, setTematicas] = useState([]);
     const [loadTematicas, setLoadTematicas] = useState(true);
