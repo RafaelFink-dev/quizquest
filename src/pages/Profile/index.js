@@ -240,7 +240,6 @@ export default function Profile() {
 
             if (imageAvatar === null && nome !== user.nome || instituicao[instituicaoSelected].nomeInstituicao != user.instituicaoEnsino || cursos[courseSelected].nomeCurso != user.curso || turmas[turmaSelected.nomeTurma != user.turma]) {
 
-                console.log('É DIFERENTE')
                 //Atualizar somente o nome
                 const docRef = doc(db, 'users', user.uid)
                 await updateDoc(docRef, {
@@ -253,11 +252,12 @@ export default function Profile() {
                         let data = { //pegando todas infos e atualizando somente o que precisa
                             ...user,
                             nome: nome,
-                            instituicaoEnsino: instituicao[instituicaoSelected].nomeInstituicao,
+                            instituicaoEnsino: instituicao[instituicaoSelected],
                             curso: cursos[courseSelected].nomeCurso,
                             turma: turmas[turmaSelected].nome
                         }
 
+                        handleUpload();
                         setUser(data);
                         storageUser(data);
                         toast.success('Informações alteradas com sucesso!')
@@ -266,6 +266,8 @@ export default function Profile() {
                 //Atualizar nome e imagem
                 handleUpload();
             }
+
+            return;
         } 
 
         if (imageAvatar === null && nome !== user.nome || cnpj != user.cnpj || endereco != user.endereco) {

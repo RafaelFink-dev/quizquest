@@ -94,6 +94,11 @@
     border-radius: 6px;
     padding: 5px;
     color: #FFF;
+    text-align: center;
+  }
+
+  .quiz-info h2{
+    text-align: center;
   }
 
   .question-box h3{
