@@ -260,6 +260,7 @@ function AuthProvider({ children }) {
                     endereco: docSnap.data().endereco,
                     instituicao: docSnap.data().instituicao,
                     professor: docSnap.data().professor,
+                    aluno: docSnap.data().aluno,
                     avatarUrl: docSnap.data().avatarUrl,
                     pontos: docSnap.data().pontos,
                     instituicaoEnsino: docSnap.data().instituicaoEnsino ? docSnap.data().instituicaoEnsino.nomeInstituicao : null,

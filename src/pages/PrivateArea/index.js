@@ -38,10 +38,6 @@ export default function PrivateArea() {
                             CADASTRAR TEMÁTICAS
                         </Link>
 
-                        <Link to='/viewIndicators' style={{backgroundColor: '#e8e8e8', pointerEvents: 'none'}}>
-                            VISUALIZAR INDICADORES
-                        </Link>
-
                         <Link to='/registerCourse'>
                             CADASTRAR CURSOS
                         </Link>

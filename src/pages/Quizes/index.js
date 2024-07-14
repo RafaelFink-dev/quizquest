@@ -8,7 +8,7 @@ import { FiHelpCircle } from 'react-icons/fi';
 import { useEffect, useState } from 'react';
 
 import { db } from '../../services/firebaseConnection';
-import { collection, getDocs, where, query,  limit, and, startAfter } from 'firebase/firestore';
+import { collection, getDocs, where, query, limit, and, startAfter } from 'firebase/firestore';
 
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -98,7 +98,7 @@ export default function Quizes() {
                 ...doc.data()
             }));
 
-            if (querySnapshot.docs.length === 0){
+            if (querySnapshot.docs.length === 0) {
                 toast.warn('Nenhum quiz encontrado com o filtro informado!')
                 return;
             }
@@ -187,7 +187,50 @@ export default function Quizes() {
 
                     </div>
 
-                    <div className="quiz-list">
+                    {quizzes.length === 0 ? (
+                        <div style={{fontWeight: 'bold', fontStyle: 'italic'}}>Nenhum quiz a ser exibido</div>
+                    ) : (
+                        <div className="quiz-list">
+                            {quizzes.map(quiz => (
+
+                                <div className='quiz-container'>
+
+                                    <div className='quiz-title'>
+                                        <h1>{quiz.nome}</h1>
+                                    </div>
+
+
+                                    <div className='quiz-level'
+                                        style={{
+                                            backgroundColor:
+                                                quiz.dificuldade === 'Fácil' ? 'green' :
+                                                    quiz.dificuldade === 'Média' ? 'yellow' :
+                                                        quiz.dificuldade === 'Difícil' ? 'red' : 'defaultColor',
+                                            color:
+                                                quiz.dificuldade === 'Fácil' ? '#FFF' :
+                                                    quiz.dificuldade === 'Média' ? '#121212' :
+                                                        quiz.dificuldade === 'Difícil' ? '#FFF' : 'defaultColor'
+                                        }}
+                                    >
+                                        <h1>{quiz.dificuldade.toUpperCase()}</h1>
+                                    </div>
+
+
+                                    <div className='quiz-acessos'>
+                                        <h1>TOTAL DE ACESSOS: {quiz.acessos}</h1>
+                                    </div>
+
+
+                                    <Link to={`/quiz-start/${quiz.id}`} className='quiz-button'>ACESSAR QUIZ</Link>
+
+                                </div>
+
+
+                            ))}
+                        </div>
+                    )}
+
+                    {/*<div className="quiz-list">
                         {quizzes.map(quiz => (
 
                             <div className='quiz-container'>
@@ -218,13 +261,13 @@ export default function Quizes() {
                                 </div>
 
 
-                                <Link to={`/quiz-start/${quiz.id}`}  className='quiz-button'>ACESSAR QUIZ</Link>
+                                <Link to={`/quiz-start/${quiz.id}`} className='quiz-button'>ACESSAR QUIZ</Link>
 
                             </div>
 
 
                         ))}
-                    </div>
+                    </div>*/}
 
                 </div>
 
