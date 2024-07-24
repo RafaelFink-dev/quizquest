@@ -66,7 +66,8 @@ function AuthProvider({ children }) {
                                 email: email,
                                 professor: true,
                                 avatarUrl: null,
-                                pontos: 0
+                                pontos: 0,
+                                status: 'Ativo'
                             })
                                 .then(() => {
 
@@ -131,7 +132,8 @@ function AuthProvider({ children }) {
                                     endereco: endereco,
                                     nivelDeEnsino: nivelDeEnsino,
                                     avatarUrl: null,
-                                    pontos: 0
+                                    pontos: 0,
+                                    status: 'Ativo'
                                 })
                                     .then(() => {
 
@@ -200,7 +202,8 @@ function AuthProvider({ children }) {
                                 pontos: 0,
                                 instituicaoEnsino: '',
                                 curso: '',
-                                turma: ''
+                                turma: '',
+                                status: 'Ativo'
                             })
                                 .then(() => {
 
@@ -364,6 +367,7 @@ function AuthProvider({ children }) {
                 handleRegisterTeacher,
                 ResetPasswordTeacher,
                 loadingAuth,
+                setLoadingAuth,
                 loading,
                 logout,
                 storageUser,

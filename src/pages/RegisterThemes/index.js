@@ -3,12 +3,13 @@ import './registerThemes.css'
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 
-import { useState, useEffect } from 'react';
-import { getDocs, collection, addDoc } from 'firebase/firestore';
+import { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../../contexts/auth';
+import { getDocs, collection, addDoc, updateDoc, onSnapshot, doc, where, query } from 'firebase/firestore';
 import { db } from '../../services/firebaseConnection';
 import { useNavigate } from 'react-router-dom';
 
-import { FiEdit } from 'react-icons/fi';
+import { FiEdit, FiList, FiEdit2 } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 
 export default function RegisterThemes() {
@@ -22,6 +23,26 @@ export default function RegisterThemes() {
     const [cursos, setCursos] = useState([]);
     const [loadCourses, setLoadCourses] = useState(true);
     const [courseSelected, setCourseSelected] = useState(0);
+
+    const listRefThemes = collection(db, 'tematicas');
+    const [tematicas, setTematicas] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [editing, setEditing] = useState(false);
+    const [ativo, setAtivo] = useState('Ativo');
+
+    const { handleRegisterTeacher, loadingAuth } = useContext(AuthContext);
+
+
+    const getBackgroundColor = (status) => {
+        switch (status) {
+            case 'Ativo':
+                return '#5CB85C';
+            case 'Desativado':
+                return '#D9534F';
+
+        }
+    };
+
 
 
     useEffect(() => {
@@ -56,7 +77,35 @@ export default function RegisterThemes() {
                 })
         }
 
+        async function loadTematicas() {
+
+            const q = query(listRefThemes);
+
+            onSnapshot(q, (snapshot) => {
+                let lista = [];
+
+                snapshot.forEach((doc) => {
+                    lista.push({
+                        id: doc.id,
+                        ...doc.data()
+                    })
+
+
+                    setTematicas(lista);
+                    //setLoading(false);
+                })
+            })
+
+        }
+
+        loadTematicas();
         loadCourses();
+
+        setTimeout(() => {
+            setLoading(false);
+        }, 500);  // 500ms de atraso
+
+
 
     }, [])
 
@@ -68,6 +117,25 @@ export default function RegisterThemes() {
     function handleCancel() {
         navigate('/privateArea')
         toast.warn('Operação cancelada!')
+    }
+
+    function handleEdit(item) {
+        setEditing(true);
+        setTematica(item.nome);
+        //setAtivo(item.status);
+        //setIdCustormer(item.id);
+    }
+
+    function handleOptionChange(e) {
+        setAtivo(e.target.value);
+    }
+
+    function handleCancelInsert() {
+        setEditing(false);
+        setTematica('');
+        setCourseSelected(0);
+        setAtivo('Ativo')
+        toast.warn('Alterações canceladas')
     }
 
     async function handleRegisterClass(e) {
@@ -97,6 +165,24 @@ export default function RegisterThemes() {
 
 
 
+    }
+
+    if (loading) {
+        return (
+            <div>
+                <Header />
+
+                <div className='content'>
+                    <Title name='ÁREA PRIVADA - CADASTRO DE TEMÁTICAS'>
+                        <FiEdit size={24} />
+                    </Title>
+
+                    <div style={{ marginTop: 20, fontWeight: 'bold', fontSize: 20 }} className='container'>
+                        <span>Buscando temáticas...</span>
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -137,16 +223,104 @@ export default function RegisterThemes() {
                             )
                         }
 
-                        <div className='area-btn'>
+                        <label>Status da temática:</label>
+                        <div className='status'>
+                            <label className='radio-container'>
+                                <input
+                                    type='radio'
+                                    name='radio'
+                                    value='Ativo'
+                                    onChange={handleOptionChange}
+                                    checked={ativo === 'Ativo'}
+                                />
+                                <span className='radio-label'>Ativa</span>
+                                <span className='radio-checkmark'></span>
+                            </label>
 
-                            <button className='btn-save' onClick={handleCancel}>CANCELAR</button>
-                            <button type='submit' className='btn-save'>CADASTRAR</button>
-
+                            <label className='radio-container'>
+                                <input
+                                    type='radio'
+                                    name='radio'
+                                    value='Desativado'
+                                    onChange={handleOptionChange}
+                                    checked={ativo === 'Desativado'}
+                                />
+                                <span className='radio-label'>Desativada</span>
+                                <span className='radio-checkmark'></span>
+                            </label>
                         </div>
+
+                        {editing ? (
+                            <div className='area-btn'>
+
+                                <button type='button' className='btn-save' onClick={handleCancelInsert}>CANCELAR ALTERAÇÕES</button>
+                                <button type='submit' className='btn-save'>
+                                    {loadingAuth ? 'ALTERANDO...' : 'ALTERAR TEMÁTICA'}
+                                </button>
+                            </div>
+                        ) : (
+                            <div className='area-btn'>
+
+                                <button type='button' className='btn-save' onClick={handleCancel}>CANCELAR</button>
+                                <button type='submit' className='btn-save'>
+                                    {loadingAuth ? 'CADASTRANDO...' : 'CADASTRAR TEMÁTICA'}
+
+                                </button>
+                            </div>
+                        )}
 
                     </form>
 
 
+
+                </div>
+
+                <div className='container-profile'>
+
+                    <div className='title-grid'>
+                        <FiList size={24} />
+                        <h1>LISTAGEM/MANUTENÇÃO DE TEMÁTICAS CADASTRADAS</h1>
+                    </div>
+
+                    <div className='container'>
+
+                        {tematicas.length === 0 ? (
+                            <div>
+                                <span >Nenhuma temática encontrada...</span>
+                            </div>
+                        ) : (
+                            <>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th scope='col'>Temática</th>
+                                            <th scope='col'>Status</th>
+                                            <th scope='col'>#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {tematicas.map((item, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td data-label='Temática' style={{ color: '#121212' }}>{item.nomeTematica}</td>
+                                                    <td data-label='Status'>
+                                                        <span className='badge' style={{ backgroundColor: getBackgroundColor(item.status) }}>
+                                                            {item.status}
+                                                        </span>
+                                                    </td>
+                                                    <td data-label='#'>
+                                                        <button className='action' style={{ backgroundColor: '#f6a935' }} onClick={() => { handleEdit(item) }}>
+                                                            <FiEdit2 color='#FFF' size={17} />
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                            </>
+                        )}
+                    </div>
 
                 </div>
 

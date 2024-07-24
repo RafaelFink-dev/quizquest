@@ -5,19 +5,71 @@ import Title from '../../components/Title';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { FiEdit } from 'react-icons/fi';
+import { FiEdit, FiList, FiEdit2 } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 
 import { db } from '../../services/firebaseConnection';
 
-import { addDoc, collection } from 'firebase/firestore';
+import { getDocs, collection, addDoc, updateDoc, onSnapshot, doc, where, query } from 'firebase/firestore';
 
 export default function RegisterCourse() {
 
+    const listRef = collection(db, 'courses');
     const [curso, setCurso] = useState('');
     const [areaConhecimento, setAreaConhecimento] = useState('Ciências Agrárias');
 
+    const [cursosList, setCursosList] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [editing, setEditing] = useState(false);
+
     const navigate = useNavigate();
+
+    const getBackgroundColor = (status) => {
+        switch (status) {
+            case 'Ativo':
+                return '#5CB85C';
+            case 'Desativado':
+                return '#D9534F';
+
+        }
+    };
+
+    useEffect(() => {
+
+        //CARREGAR CURSOS AO ABRIR A TELA
+        async function loadCourses() {
+            const querySnapshot = await getDocs(listRef)
+                .then((snapshot) => {
+                    //LISTA PARA ADD CURSOS
+                    let lista = [] 
+
+                    snapshot.forEach((course) => {
+                        lista.push({
+                            id: course.id,
+                            nomeCurso: course.data().nomeCurso,
+                            status: course.data().status,
+                            areaConhecimento: course.data().areaConhecimento
+                        })
+                    })
+
+                    setCursosList(lista);
+                    //setLoadCourses(false);
+                })
+                .catch((e) => {
+                    console.log(e);
+                    //setLoadCourses(false);
+                })
+        }
+
+        loadCourses();
+
+        setTimeout(() => {
+            setLoading(false);
+        }, 110); 
+
+
+
+    }, [])
 
 
     function handleCancel() {
@@ -27,6 +79,14 @@ export default function RegisterCourse() {
 
     function handleChangeSelect(e) {
         setAreaConhecimento(e.target.value);
+    }
+
+    function handleEdit(item) {
+        setEditing(true);
+        setCurso(item.nomeCurso);
+        setAreaConhecimento(item.areaConhecimento);
+        //setAtivo(item.status);
+        //setIdCustormer(item.id);
     }
 
     //INSERINDO CURSO
@@ -93,7 +153,56 @@ export default function RegisterCourse() {
 
                     </form>
 
+                </div>
 
+                <div className='container-profile'>
+
+                    <div className='title-grid'>
+                        <FiList size={24} />
+                        <h1>LISTAGEM/MANUTENÇÃO DE CURSOS CADASTRADOS</h1>
+                    </div>
+
+                    <div className='container'>
+
+                        {cursosList.length === 0 ? (
+                            <div>
+                                <span >Nenhuma temática encontrada...</span>
+                            </div>
+                        ) : (
+                            <>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th scope='col'>Temática</th>
+                                            <th scope='col'>Área de conhecimento</th>
+                                            <th scope='col'>Status</th>
+                                            <th scope='col'>#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {cursosList.map((item, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td data-label='Temática' style={{ color: '#121212' }}>{item.nomeCurso}</td>
+                                                    <td data-label='Temática' style={{ color: '#121212' }}>{item.areaConhecimento}</td>
+                                                    <td data-label='Status'>
+                                                        <span className='badge' style={{ backgroundColor: getBackgroundColor(item.status) }}>
+                                                            {item.status}
+                                                        </span>
+                                                    </td>
+                                                    <td data-label='#'>
+                                                        <button className='action' style={{ backgroundColor: '#f6a935' }} onClick={() => { handleEdit(item) }}>
+                                                            <FiEdit2 color='#FFF' size={17} />
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                            </>
+                        )}
+                    </div>
 
                 </div>
 

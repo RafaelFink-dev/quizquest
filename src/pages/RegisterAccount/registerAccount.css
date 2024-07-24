@@ -13,10 +13,10 @@
 }
 
 .form-profile {
-   display: flex;
+    display: flex;
 }
 
-.area-button{
+.area-button {
     display: flex;
     max-width: 600px;
     justify-content: center;
@@ -27,8 +27,141 @@
     margin-left: 10px;
 }
 
+.title-grid {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    font-size: 8px;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.title-grid h1 {
+    margin-top: 2px;
+}
+
+table {
+    border: 1px solid #CCC;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+table caption {
+    font-size: 1.5em;
+    margin: 0.5em 0.75em;
+}
+
+table tr {
+    background-color: #F8F8F8;
+    border: 1px solid #DDD;
+    padding: 0.35em;
+}
+
+table th,
+table td {
+    padding: 0.62em;
+    text-align: center;
+}
+
+table th {
+    font-size: 0.85em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+table td .action {
+    border: 0;
+    padding: 5px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-right: 3px;
+}
+
+table td .action svg {
+    vertical-align: middle;
+}
+
+table td .badge {
+    padding: 3px;
+    border-radius: 3px;
+    color: #FFF;
+}
+
+/*.status span {
+    margin-left: 5px;
+    margin-right: 5px;
+}*/
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 10px;
+}
+
+.radio-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    padding-left: 35px;
+    margin-right: 20px;
+    user-select: none;
+}
+
+.radio-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.radio-label {
+    margin-left: 8px;
+    margin-top: 2px;
+    font-size: 1.0em;
+    font-weight: 'bold';
+    color: #333;
+}
+
+.radio-checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 50%;
+}
+
+.radio-container input:checked ~ .radio-checkmark {
+    background-color: #FF8820;
+}
+
+.radio-checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.radio-container input:checked ~ .radio-checkmark:after {
+    display: block;
+}
+
+.radio-container .radio-checkmark:after {
+    top: 5px;
+    left: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: white;
+}
+
 @media screen and (max-width: 400px) {
-    .btn-save{
+    .btn-save {
         font-size: 12px;
         text-align: center;
     }
