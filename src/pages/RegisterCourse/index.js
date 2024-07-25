@@ -2,8 +2,9 @@
 import Header from '../../components/Header';
 import Title from '../../components/Title';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../contexts/auth';
 
 import { FiEdit, FiList, FiEdit2 } from 'react-icons/fi';
 import { toast } from 'react-toastify';
@@ -21,6 +22,10 @@ export default function RegisterCourse() {
     const [cursosList, setCursosList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [editing, setEditing] = useState(false);
+    const [ativo, setAtivo] = useState('Ativo');
+    const [idCurso, setIdCurso] = useState('');
+
+    const { loadingAuth, setLoadingAuth } = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -38,10 +43,10 @@ export default function RegisterCourse() {
 
         //CARREGAR CURSOS AO ABRIR A TELA
         async function loadCourses() {
-            const querySnapshot = await getDocs(listRef)
+            /*const querySnapshot = await getDocs(listRef)
                 .then((snapshot) => {
                     //LISTA PARA ADD CURSOS
-                    let lista = [] 
+                    let lista = []
 
                     snapshot.forEach((course) => {
                         lista.push({
@@ -58,14 +63,36 @@ export default function RegisterCourse() {
                 .catch((e) => {
                     console.log(e);
                     //setLoadCourses(false);
+                })*/
+
+
+            const q = query(listRef);
+
+            onSnapshot(q, (snapshot) => {
+                let lista = [];
+
+                snapshot.forEach((doc) => {
+                    lista.push({
+                        id: doc.id,
+                        ...doc.data()
+                    })
+
+
+                    setCursosList(lista);
+                    //setLoading(false);
                 })
+            })
+
+
         }
+
+
 
         loadCourses();
 
         setTimeout(() => {
             setLoading(false);
-        }, 110); 
+        }, 110);
 
 
 
@@ -77,26 +104,67 @@ export default function RegisterCourse() {
         toast.warn('Operação cancelada!')
     }
 
+    function handleCancelInsert() {
+        setEditing(false);
+        //setTematica('');
+        //setCourseSelected(0);
+        //setAtivo('Ativo')
+        toast.warn('Alterações canceladas')
+    }
+
     function handleChangeSelect(e) {
         setAreaConhecimento(e.target.value);
+    }
+
+    function handleOptionChange(e) {
+        setAtivo(e.target.value);
     }
 
     function handleEdit(item) {
         setEditing(true);
         setCurso(item.nomeCurso);
         setAreaConhecimento(item.areaConhecimento);
-        //setAtivo(item.status);
-        //setIdCustormer(item.id);
+        setAtivo(item.status);
+        setIdCurso(item.id)
     }
 
     //INSERINDO CURSO
     async function handleSubmit(e) {
         e.preventDefault();
 
+        if (editing) {
+
+            setLoadingAuth(true);
+            //Atualizando curso
+
+            const docRef = doc(db, 'courses', idCurso)
+            await updateDoc(docRef, {
+                nomeCurso: curso,
+                areaConhecimento: areaConhecimento,
+                status: ativo,
+            })
+                .then(() => {
+                    toast.success("Curso atualizado com sucesso!")
+                    setLoadingAuth(false)
+                    setEditing(false);
+                    setCurso('');
+                    setAreaConhecimento(0);
+                    setAtivo('Ativo');
+
+                })
+                .catch((e) => {
+                    toast.error('Ops! erro ao atualizar este curso!')
+                    console.log(e);
+                })
+
+            return;
+        }
+
         if (curso !== '') {
             await addDoc(collection(db, 'courses'), {
                 nomeCurso: curso,
-                areaConhecimento: areaConhecimento
+                areaConhecimento: areaConhecimento,
+                status: ativo
             })
                 .then(() => {
                     toast.success('Curso adicionado!')
@@ -144,12 +212,54 @@ export default function RegisterCourse() {
                             <option value='Letras e Artes'>Letras e Artes</option>
                         </select>
 
-                        <div className='area-btn'>
+                        <label>Status do curso:</label>
+                        <div className='status'>
+                            <label className='radio-container'>
+                                <input
+                                    type='radio'
+                                    name='radio'
+                                    value='Ativo'
+                                    onChange={handleOptionChange}
+                                    checked={ativo === 'Ativo'}
+                                />
+                                <span className='radio-label'>Ativo</span>
+                                <span className='radio-checkmark'></span>
+                            </label>
 
-                            <button className='btn-save' onClick={handleCancel}>CANCELAR</button>
-                            <button type='submit' className='btn-save'>CADASTRAR</button>
-
+                            <label className='radio-container'>
+                                <input
+                                    type='radio'
+                                    name='radio'
+                                    value='Desativado'
+                                    onChange={handleOptionChange}
+                                    checked={ativo === 'Desativado'}
+                                />
+                                <span className='radio-label'>Desativado</span>
+                                <span className='radio-checkmark'></span>
+                            </label>
                         </div>
+
+
+                        {editing ? (
+                            <div className='area-btn'>
+
+                                <button type='button' className='btn-save' onClick={handleCancelInsert}>CANCELAR ALTERAÇÕES</button>
+                                <button type='submit' className='btn-save'>
+                                    {loadingAuth ? 'ALTERANDO...' : 'ALTERAR CURSO'}
+                                </button>
+                            </div>
+                        ) : (
+                            <div className='area-btn'>
+
+                                <button type='button' className='btn-save' onClick={handleCancel}>CANCELAR</button>
+                                <button type='submit' className='btn-save'>
+                                    {loadingAuth ? 'CADASTRANDO...' : 'CADASTRAR CURSO'}
+
+                                </button>
+                            </div>
+                        )}
+
+
 
                     </form>
 
@@ -166,14 +276,14 @@ export default function RegisterCourse() {
 
                         {cursosList.length === 0 ? (
                             <div>
-                                <span >Nenhuma temática encontrada...</span>
+                                <span >Nenhum curso encontrado...</span>
                             </div>
                         ) : (
                             <>
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th scope='col'>Temática</th>
+                                            <th scope='col'>Curso</th>
                                             <th scope='col'>Área de conhecimento</th>
                                             <th scope='col'>Status</th>
                                             <th scope='col'>#</th>
@@ -183,8 +293,8 @@ export default function RegisterCourse() {
                                         {cursosList.map((item, index) => {
                                             return (
                                                 <tr key={index}>
-                                                    <td data-label='Temática' style={{ color: '#121212' }}>{item.nomeCurso}</td>
-                                                    <td data-label='Temática' style={{ color: '#121212' }}>{item.areaConhecimento}</td>
+                                                    <td data-label='Nome' style={{ color: '#121212' }}>{item.nomeCurso}</td>
+                                                    <td data-label='Area de conhecimento' style={{ color: '#121212' }}>{item.areaConhecimento}</td>
                                                     <td data-label='Status'>
                                                         <span className='badge' style={{ backgroundColor: getBackgroundColor(item.status) }}>
                                                             {item.status}
