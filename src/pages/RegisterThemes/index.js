@@ -29,8 +29,9 @@ export default function RegisterThemes() {
     const [loading, setLoading] = useState(true);
     const [editing, setEditing] = useState(false);
     const [ativo, setAtivo] = useState('Ativo');
+    const [idTheme, setIdTheme] = useState();
 
-    const { handleRegisterTeacher, loadingAuth } = useContext(AuthContext);
+    const { loadingAuth, setLoadingAuth } = useContext(AuthContext);
 
 
     const getBackgroundColor = (status) => {
@@ -56,8 +57,11 @@ export default function RegisterThemes() {
 
                     snapshot.forEach((course) => {
                         lista.push({
+                            /*id: course.id,
+                            nomeCurso: course.data().nomeCurso*/
+
                             id: course.id,
-                            nomeCurso: course.data().nomeCurso
+                            ...course.data()
                         })
                     })
 
@@ -66,6 +70,8 @@ export default function RegisterThemes() {
                         setLoadCourses(false);
                         return;
                     }
+
+                    console.log()
 
                     setCursos(lista);
                     setLoadCourses(false);
@@ -121,9 +127,11 @@ export default function RegisterThemes() {
 
     function handleEdit(item) {
         setEditing(true);
-        setTematica(item.nome);
-        //setAtivo(item.status);
-        //setIdCustormer(item.id);
+        setTematica(item.nomeTematica);
+        const index = cursos.findIndex(course => course.id === item.curso.id);
+        setCourseSelected(index);
+        setAtivo(item.status);
+        setIdTheme(item.id);
     }
 
     function handleOptionChange(e) {
@@ -140,6 +148,34 @@ export default function RegisterThemes() {
 
     async function handleRegisterClass(e) {
         e.preventDefault();
+
+        if (editing) {
+
+            setLoadingAuth(true);
+            //Atualizando tematica
+
+            const docRef = doc(db, 'tematicas', idTheme)
+            await updateDoc(docRef, {
+                nomeTematica: tematica,
+                curso: cursos[courseSelected],
+                status: ativo,
+            })
+                .then(() => {
+                    toast.success("Temática atualizada com sucesso!")
+                    setLoadingAuth(false)
+                    setEditing(false);
+                    setTematica('');
+                    setCourseSelected(0);
+                    setAtivo('Ativo');
+
+                })
+                .catch((e) => {
+                    toast.error('Ops! erro ao atualizar esta temática!')
+                    console.log(e);
+                })
+
+            return;
+        }
 
         if (tematica !== '') {
 
@@ -160,7 +196,7 @@ export default function RegisterThemes() {
 
             return;
         } else {
-            toast.warn('Preencha um nome para inserir um curso!')
+            toast.warn('Preencha um nome para inserir ua temática!')
         }
 
 
@@ -294,6 +330,7 @@ export default function RegisterThemes() {
                                     <thead>
                                         <tr>
                                             <th scope='col'>Temática</th>
+                                            <th scope='col'>Curso</th>
                                             <th scope='col'>Status</th>
                                             <th scope='col'>#</th>
                                         </tr>
@@ -303,6 +340,7 @@ export default function RegisterThemes() {
                                             return (
                                                 <tr key={index}>
                                                     <td data-label='Temática' style={{ color: '#121212' }}>{item.nomeTematica}</td>
+                                                    <td data-label='Curso' style={{ color: '#121212' }}>{item.curso.nomeCurso}</td>
                                                     <td data-label='Status'>
                                                         <span className='badge' style={{ backgroundColor: getBackgroundColor(item.status) }}>
                                                             {item.status}
