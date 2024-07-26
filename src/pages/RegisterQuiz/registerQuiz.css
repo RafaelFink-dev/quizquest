@@ -147,3 +147,28 @@
 .area-btn-quiz button:not(:first-child){
     margin-left: 10px;
 }
+
+
+@media screen and (max-width: 1181px) {
+
+
+    .middle{
+        display: flex;
+        flex-direction: column;
+    }
+
+  }
+
+  @media screen and (max-width: 911px) {
+
+
+    .header{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .header div{
+        background-color: red;
+        width: 90%;
+    }
+  }

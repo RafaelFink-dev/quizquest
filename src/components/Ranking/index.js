@@ -1,11 +1,15 @@
 import './ranking.css'
 
+import avatarImg from '../../assets/avatar2.png'
+import { useContext } from 'react';
+import { AuthContext } from '../../contexts/auth';
+
 export default function Ranking({ listRanking = [] }) {
 
+    const { user } = useContext(AuthContext);
 
     return (
         <div className='container-ranking'>
-
 
             <div className='title-ranking-div'>
                 <div>

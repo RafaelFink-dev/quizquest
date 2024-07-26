@@ -74,10 +74,12 @@ export default function Home() {
                     usersRanking.push({
                         id: aluno.id,
                         nomeUsuario: aluno.data().nome,
-                        pontos: aluno.data().pontos
+                        pontos: aluno.data().pontos,
+                        fotoUrl: aluno.data().avatarUrl
                     });
                 });
 
+                console.log(usersRanking)
                 setUsersRanking(usersRanking);
 
                 setLoadUsers(false);
