@@ -9,7 +9,7 @@
 .title-ranking-div {
     background-color: #3F97AF;
     padding: 18px;
-    height: 60px;
+    height: 50px;
     border-radius: 38px;
     display: flex;
     align-items: center;
@@ -33,7 +33,8 @@
 
 
 .title-ranking-div div h1 {
-    font-size: 25px;
+    font-size: 18px;
+    
 }
 
 
@@ -45,7 +46,7 @@
 }
 
 .list-ranking-div-nome {
-    font-size: 13px;
+    font-size: 10px;
 }
 
 .list-ranking-div-posicao {
@@ -73,7 +74,7 @@
 
 .list-ranking-div-pontos {
     background-color: #FFF;
-    width: 150px;
+    width: 120px;
     height: 40px;
     border-radius: 22px;
     font-style: italic;
