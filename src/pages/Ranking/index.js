@@ -29,7 +29,7 @@ export default function Ranking() {
         async function loadUsersRanking() {
             try {
                 // Cria a query para ordenar os documentos pela coluna 'pontos' em ordem decrescente
-                const q = query(listRefUsers, orderBy('pontos', 'desc'), limit(10));
+                const q = query(listRefUsers, orderBy('pontos', 'desc'));
 
                 // Obtém os documentos da query
                 const querySnapshot = await getDocs(q);
